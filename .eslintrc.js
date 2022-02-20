@@ -65,6 +65,12 @@ module.exports = {
       'error',
       { props: true, ignorePropertyModificationsFor: ['state'] },
     ],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
   settings: {
     'import/resolver': {
