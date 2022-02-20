@@ -4,8 +4,10 @@ import { Provider } from 'react-redux';
 
 import 'index.css';
 import App from 'app';
-import { store } from 'app/store';
+import store from 'store';
 import * as serviceWorker from 'serviceWorker';
+
+const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
   <StrictMode>
@@ -13,7 +15,7 @@ ReactDOM.render(
       <App />
     </Provider>
   </StrictMode>,
-  document.getElementById('root')
+  MOUNT_NODE
 );
 
 // If you want your app to work offline and load faster, you can change
