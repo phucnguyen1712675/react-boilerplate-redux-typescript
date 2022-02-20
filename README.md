@@ -42,3 +42,10 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+https://javascript.plainenglish.io/setting-eslint-and-prettier-on-a-react-typescript-project-2021-22993565edf9
+https://levelup.gitconnected.com/add-husky-lint-staged-to-react-typescript-b634314a9739
+https://medium.com/geekculture/making-life-easier-with-absolute-imports-react-in-javascript-and-typescript-bbdab8a8a3a1
+https://editorconfig.org/
+https://medium.com/geekculture/strong-typed-i18n-in-react-c43281de720c
+https://redux-toolkit.js.org/tutorials/quick-start
