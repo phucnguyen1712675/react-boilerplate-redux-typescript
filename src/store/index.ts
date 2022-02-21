@@ -1,21 +1,12 @@
-import {
-  configureStore,
-  ThunkAction,
-  Action,
-  createSlice,
-} from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
-const counterSlice = createSlice({
-  name: 'counter',
-  initialState: 0,
-  reducers: {},
-});
-
-const counterReducer = counterSlice.reducer;
+import usersReducer from 'store/usersSlice';
+import postsReducer from 'store/postsSlice';
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    users: usersReducer,
+    posts: postsReducer,
   },
 });
 

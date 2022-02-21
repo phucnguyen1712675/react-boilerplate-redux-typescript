@@ -1024,7 +1024,7 @@
     core-js-pure "^3.20.2"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.10", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.5.1", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.10.2", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.13.10", "@babel/runtime@^7.15.4", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.5.1", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.17.2"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.2.tgz#66f68591605e59da47523c631416b18508779941"
   integrity sha512-hzeyJyMA1YGdJTuWU0e/j4wKXrU4OMFvY2MSlaI9B7VQb0r5cxTE3EAIS2Q7Tn2RIcDkRvTA/v2JsAEhxe99uw==
@@ -1892,6 +1892,11 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/fontfaceobserver@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/fontfaceobserver/-/fontfaceobserver-2.1.0.tgz#9ec2eabadfcaaf8c68c5e1254d19f5a293d132b4"
+  integrity sha512-Vqf183RAiFdIjUi4asKqogf2HIfLDnxn+dQo9GCpnsU5QrrsLMA2bkJU1dHRudQlizLybWD61Csd1zAgUQ3JKQ==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
@@ -6779,6 +6784,13 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
+polished@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-4.1.4.tgz#640293ba834109614961a700fdacbb6599fb12d0"
+  integrity sha512-Nq5Mbza+Auo7N3sQb1QMFaQiDO+4UexWuSGR7Cjb4Sw11SZIJcrrFtiZ+L0jT9MBsUsxDboHVASbCLbE1rnECg==
+  dependencies:
+    "@babel/runtime" "^7.16.7"
+
 portfinder@^1.0.28:
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/portfinder/-/portfinder-1.0.28.tgz#67c4622852bd5374dd1dd900f779f53462fac778"
@@ -8893,6 +8905,11 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+usehooks-ts@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/usehooks-ts/-/usehooks-ts-2.4.1.tgz#90066cbc4ee509de190c00d91a8aace81f7ba95d"
+  integrity sha512-8H+qEX/5KiLr7diCZ485dJMTyr9Ta815Dw8zTV2b8PiiTy6breZF1TQ7/j+QoGuy9RMs8CToqAO05dztWuxcFA==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
