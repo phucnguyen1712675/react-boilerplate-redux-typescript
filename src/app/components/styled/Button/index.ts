@@ -1,4 +1,5 @@
 import styled from '@emotion/styled/macro';
+import { CSSObject } from '@emotion/react/macro';
 import isPropValid from '@emotion/is-prop-valid';
 
 import type { Theme } from 'types';
@@ -106,25 +107,22 @@ type Props = {
   theme?: Theme;
   enableElevation?: boolean;
   disabled?: boolean;
-  className?: string;
 };
 
 const StyledButton = ({
   color,
-  className,
   enableElevation = false,
   disabled = false,
   variant = 'solid',
   size = 'medium',
   theme = defaultTheme,
-}: Props) => {
+}: Props): CSSObject => {
   const fontSizeBySize = buttonSizeProps[size]?.fontSize;
   const paddingBySize = buttonSizeProps[size]?.padding;
 
   const propsByVariant = getPropsByVariant({ variant, theme, color });
 
   return {
-    className,
     fontWeight: 500,
     cursor: 'pointer',
     opacity: disabled ? 0.7 : undefined,

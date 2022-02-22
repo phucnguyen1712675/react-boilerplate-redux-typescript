@@ -1,1 +1,2 @@
-export { default as REQUEST_STATUS } from 'enums/REQUEST_STATUS';
+export { default as RequestStatus } from 'enums/RequestStatus';
+export { default as StyleConstants } from 'enums/StyleConstants';

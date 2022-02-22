@@ -36,10 +36,19 @@ const shape = {
   borderRadius: spacing.xxsmall,
 };
 
+const lightTheme = {
+  text: 'rgba(58,52,51,1)',
+  textSecondary: 'rgba(58,52,51,0.7)',
+  background: 'rgba(255,255,255,1)',
+  border: 'rgba(58,52,51,0.12)',
+  borderLight: 'rgba(58,52,51,0.05)',
+};
+
 const theme = {
   palette,
   shadows,
   shape,
+  ...lightTheme,
 };
 
 export default theme;

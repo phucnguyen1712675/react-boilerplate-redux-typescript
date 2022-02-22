@@ -1,5 +1,5 @@
-import { SerializedStyles, CSSObject } from '@emotion/react/macro';
 import styled from '@emotion/styled/macro';
+import { CSSObject } from '@emotion/react/macro';
 import isPropValid from '@emotion/is-prop-valid';
 
 import { Theme, Spacing } from 'types';
@@ -21,10 +21,7 @@ type Props = {
   marginX?: Spacing;
   marginY?: Spacing;
   width?: string;
-  display?: string;
   theme?: Theme;
-  className?: string;
-  css?: SerializedStyles;
 };
 
 const StyledBox = ({
@@ -33,9 +30,6 @@ const StyledBox = ({
   marginX,
   marginY,
   width,
-  display,
-  className,
-  css,
   ...props
 }: Props): CSSObject => {
   const padding = props.padding ? spacing[props.padding] : undefined;
@@ -88,13 +82,10 @@ const StyledBox = ({
     marginBottom,
     marginLeft,
     width,
-    display,
-    className,
-    ...css,
   };
 };
 
-const IGNORED_PROPS = ['display', 'width'];
+const IGNORED_PROPS = ['width'];
 
 const boxConfig = {
   shouldForwardProp: (prop: string) =>

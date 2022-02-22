@@ -7,7 +7,7 @@ import {
 } from '@reduxjs/toolkit';
 
 import type { RootState } from 'store';
-import { REQUEST_STATUS } from 'enums';
+import { RequestStatus } from 'enums';
 import axiosClient from 'services/api';
 
 type Post = {
@@ -22,10 +22,10 @@ const postsAdapter = createEntityAdapter<Post>({
 });
 
 const initialState = postsAdapter.getInitialState({
-  status: REQUEST_STATUS.IDLE,
+  status: RequestStatus.IDLE,
   error: null,
 } as {
-  status: REQUEST_STATUS;
+  status: RequestStatus;
   error?: string | null;
 });
 
@@ -82,14 +82,14 @@ const postsSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchPosts.pending, (state) => {
-        state.status = REQUEST_STATUS.LOADING;
+        state.status = RequestStatus.LOADING;
       })
       .addCase(fetchPosts.fulfilled, (state, action) => {
-        state.status = REQUEST_STATUS.SUCCEEDED;
+        state.status = RequestStatus.SUCCEEDED;
         postsAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchPosts.rejected, (state, action) => {
-        state.status = REQUEST_STATUS.FAILED;
+        state.status = RequestStatus.FAILED;
         state.error = action.error.message;
       })
       .addCase(addNewPost.fulfilled, postsAdapter.addOne)

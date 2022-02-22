@@ -1,4 +1,5 @@
 import { css } from '@emotion/react/macro';
+import { StyleConstants } from 'enums';
 
 const globalStyles = css`
   html,
@@ -9,7 +10,7 @@ const globalStyles = css`
   }
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    padding-top: 4rem;
+    padding-top: ${StyleConstants.NAV_BAR_HEIGHT};
     background-color: #fff;
   }
   body.fontLoaded {

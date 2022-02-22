@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react/macro';
 import { ReactNode, cloneElement, Children, isValidElement } from 'react';
 
@@ -19,8 +20,8 @@ type Props = {
 const Col = ({ children, space = 'none', ...props }: Props) => {
   return (
     <Box
-      display='flex'
       css={css`
+        display: flex;
         flex-direction: column;
       `}
       {...props}

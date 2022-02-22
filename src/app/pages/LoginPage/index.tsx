@@ -1,14 +1,21 @@
-import React from 'react';
-import { Col } from 'app/components';
-import { Box } from 'app/components/styled';
+import { Helmet } from 'react-helmet-async';
+
+// import { NavBar } from 'app/components';
+import { PageWrapper, Title } from 'app/components/styled';
+import { LoginForm } from 'app/pages/LoginPage/components';
 
 const LoginPage = () => {
   return (
-    <Col>
-      <Box>Item 1</Box>
-      <Box>Item 2</Box>
-      <Box>Item 3</Box>
-    </Col>
+    <>
+      <Helmet>
+        <title>Login Page</title>
+        <meta name='description' content='LoginPage' />
+      </Helmet>
+      <PageWrapper>
+        <Title>Login Page</Title>
+        <LoginForm />
+      </PageWrapper>
+    </>
   );
 };
 

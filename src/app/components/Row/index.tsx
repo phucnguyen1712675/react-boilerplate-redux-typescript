@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react/macro';
 import { ReactNode, cloneElement, Children, isValidElement } from 'react';
 
 import { Spacing } from 'types';
@@ -6,12 +8,16 @@ import { Box } from 'app/components/styled';
 type Props = {
   children: ReactNode;
   space?: Spacing;
-  className?: string;
 };
 
 const Row = ({ children, space = 'none', ...props }: Props) => {
   return (
-    <Box display='flex' {...props}>
+    <Box
+      css={css`
+        display: flex;
+      `}
+      {...props}
+    >
       {Children.map<ReactNode, ReactNode>(children, (child, index) => {
         if (isValidElement(child)) {
           if (child.type !== Box) {

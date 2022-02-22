@@ -1,8 +1,8 @@
-enum REQUEST_STATUS {
+enum RequestStatus {
   IDLE = 'idle',
   LOADING = 'loading',
   SUCCEEDED = 'succeeded',
   FAILED = 'failed',
 }
 
-export default REQUEST_STATUS;
+export default RequestStatus;
