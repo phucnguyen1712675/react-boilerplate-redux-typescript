@@ -1,4 +1,4 @@
-import { fontSizes } from 'utils/units';
+import { fontSizes } from 'utils';
 
 type FontSizes = keyof typeof fontSizes;
 

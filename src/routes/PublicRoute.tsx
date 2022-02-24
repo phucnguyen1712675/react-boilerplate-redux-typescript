@@ -1,17 +1,24 @@
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
-
+import { ACCESS_TOKEN_KEY } from 'app_constants';
+import { Redirect, Route, RouteProps, useLocation } from 'react-router-dom';
 import { ROUTE_PATHS } from 'routes';
-import { useAuthState } from 'services/auth';
+import type { LocationState } from 'types';
 
-const PublicRoute = () => {
-  const authenticated = useAuthState();
+const PublicRoute = (props: RouteProps) => {
+  const isLoggedIn = !!localStorage.getItem(ACCESS_TOKEN_KEY);
   const location = useLocation();
+  const locationState = location.state as LocationState | undefined;
+  const pathname = locationState?.from?.pathname;
 
-  if (authenticated) {
-    return <Navigate to={ROUTE_PATHS.HOME} state={{ from: location }} />;
+  if (isLoggedIn) {
+    return (
+      <Route
+        path={pathname}
+        render={() => <Redirect to={ROUTE_PATHS.HOME} />}
+      />
+    );
   }
 
-  return <Outlet />;
+  return <Route {...props} />;
 };
 
 export default PublicRoute;

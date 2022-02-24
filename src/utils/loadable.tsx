@@ -1,11 +1,11 @@
-import { ReactChild, ReactFragment, ReactPortal, lazy, Suspense } from 'react';
+import { lazy, ReactChild, ReactFragment, ReactPortal, Suspense } from 'react';
 
 interface Opts {
   fallback: boolean | ReactChild | ReactFragment | ReactPortal | null;
 }
 type Unpromisify<T> = T extends Promise<infer P> ? P : never;
 
-export const lazyLoad = <
+const lazyLoad = <
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   T extends Promise<any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,3 +34,5 @@ export const lazyLoad = <
     );
   };
 };
+
+export default lazyLoad;

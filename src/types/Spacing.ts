@@ -1,4 +1,4 @@
-import { spacing } from 'utils/units';
+import { spacing } from 'utils';
 
 type Spacing = keyof typeof spacing;
 

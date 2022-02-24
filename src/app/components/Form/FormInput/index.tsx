@@ -1,17 +1,42 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles, useTheme } from '@emotion/react/macro';
-import { useFormContext } from 'react-hook-form';
+import {
+  ErrorMessage,
+  HelperText,
+  Input,
+  Label,
+} from 'app/components/Form/components';
+import {
+  inputWrapperStyle,
+  readOnlyInputStyle,
+  errorInputStyle,
+  baseInputStyle,
+} from 'app/components/Form/styled/FormInput.styled';
+import { Path, useFormContext } from 'react-hook-form';
 import { HiExclamationCircle } from 'react-icons/hi';
 
-import type { IInputProps } from 'interfaces';
-import {
-  Label,
-  Input,
-  HelperText,
-  ErrorMessage,
-} from 'app/components/Form/components';
+const errorIconWrapperStyle = css`
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding-right: 0.75rem;
+`;
 
-const FormInput = ({
+type Props<TFormValues> = {
+  id: Path<TFormValues>;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  readOnly?: boolean;
+  helperText?: string;
+  validation?: object;
+};
+
+const FormInput = <TFormValues extends Record<string, unknown>>({
   id,
   label,
   validation,
@@ -20,51 +45,27 @@ const FormInput = ({
   type = 'text',
   readOnly = false,
   ...rest
-}: IInputProps) => {
+}: Props<TFormValues>) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
+
   const theme = useTheme();
 
   let inputStyle: SerializedStyles;
   if (readOnly) {
-    inputStyle = css`
-      cursor: not-allowed;
-
-      &:focus {
-        border-color: ${theme.palette.grey[300]};
-      }
-    `;
+    inputStyle = readOnlyInputStyle(theme);
   } else if (errors[id]) {
-    inputStyle = css`
-      border-color: ${theme.palette.error.main};
-
-      &:focus {
-        border-color: ${theme.palette.error.main};
-        box-shadow: '0px 5px 10px ${theme.palette.error.main}';
-      }
-    `;
+    inputStyle = errorInputStyle(theme);
   } else {
-    inputStyle = css`
-      border-color: ${theme.palette.grey[300]};
-
-      &:focus {
-        border-color: ${theme.palette.primary.main};
-        box-shadow: '0px 5px 10px ${theme.palette.primary.main}';
-      }
-    `;
+    inputStyle = baseInputStyle(theme);
   }
 
   return (
-    <>
+    <div>
       <Label htmlFor={id}>{label}</Label>
-      <div
-        css={css`
-          position: relative;
-          margin-top: 0.25rem;
-        `}
-      >
+      <div css={inputWrapperStyle}>
         <Input
           {...register(id, validation)}
           {...rest}
@@ -78,18 +79,7 @@ const FormInput = ({
         />
 
         {errors[id] && (
-          <div
-            css={css`
-              position: absolute;
-              pointer-events: none;
-              top: 0;
-              bottom: 0;
-              right: 0;
-              display: flex;
-              align-items: center;
-              padding-right: 0.75rem;
-            `}
-          >
+          <div css={errorIconWrapperStyle}>
             <HiExclamationCircle
               css={css`
                 font-size: 1.25rem;
@@ -107,7 +97,7 @@ const FormInput = ({
         {helperText !== '' && <HelperText>{helperText}</HelperText>}
         {errors[id] && <ErrorMessage>{errors[id].message}</ErrorMessage>}
       </div>
-    </>
+    </div>
   );
 };
 

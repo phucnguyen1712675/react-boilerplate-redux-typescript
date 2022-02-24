@@ -1,37 +1,34 @@
+import { useTheme, Global } from '@emotion/react/macro';
+import { ConnectedRouter } from 'connected-react-router';
 import { Helmet } from 'react-helmet-async';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-import { ROUTE_PATHS, PrivateRoute, PublicRoute } from 'routes';
-import { AuthProvider } from 'services/auth';
-import HomePage from 'app/pages/HomePage/Loadable';
-import LoginPage from 'app/pages/LoginPage/Loadable';
-import NotFoundPage from 'app/pages/NotFoundPage/Loadable';
+import { Switch, Route } from 'react-router-dom';
+import { ROUTE_PATHS } from 'routes';
+import { history } from 'utils';
+import { AuthLayout, HomeLayout } from 'routes/layouts';
+import { globalStyles } from 'styles';
 
 const App = () => {
-  return (
-    <BrowserRouter>
-      <Helmet titleTemplate='%s - Week 2' defaultTitle='Week 2'>
-        <meta name='description' content='A React application' />
-      </Helmet>
+  const theme = useTheme();
 
-      <AuthProvider>
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path={ROUTE_PATHS.LOGIN} element={<LoginPage />} />
+  const appGlobalStyles = globalStyles(theme);
+
+  return (
+    <>
+      <Global styles={appGlobalStyles} />
+      <ConnectedRouter history={history}>
+        <Helmet titleTemplate='%s - Week 2' defaultTitle='Week 2'>
+          <meta name='description' content='A React application' />
+        </Helmet>
+        <Switch>
+          <Route path={ROUTE_PATHS.LOGIN}>
+            <AuthLayout />
           </Route>
-          <Route element={<PrivateRoute />}>
-            <Route path={ROUTE_PATHS.HOME} element={<HomePage />}>
-              {/* <Route index element={<PostsPage />} />
-              <Route path={ROUTE_PATHS.POST} element={<SinglePostPage />} />
-              <Route path={ROUTE_PATHS.EDIT_POST} element={<EditPostForm />} />
-              <Route path={ROUTE_PATHS.USERS} element={<UsersList />} />
-              <Route path={ROUTE_PATHS.USER} element={<UserPage />} /> */}
-            </Route>
+          <Route path={ROUTE_PATHS.ROOT}>
+            <HomeLayout />
           </Route>
-          <Route path='*' element={<NotFoundPage />} />
-        </Routes>
-      </AuthProvider>
-    </BrowserRouter>
+        </Switch>
+      </ConnectedRouter>
+    </>
   );
 };
 

@@ -1,10 +1,9 @@
-import styled from '@emotion/styled/macro';
-import { CSSObject } from '@emotion/react/macro';
 import isPropValid from '@emotion/is-prop-valid';
-
-import type { Theme } from 'types';
+import { CSSObject } from '@emotion/react/macro';
+import styled from '@emotion/styled/macro';
 import defaultTheme from 'styles/theme';
-import { spacing, fontSizes } from 'utils/units';
+import type { Theme } from 'types';
+import { fontSizes, spacing } from 'utils';
 
 const buttonSizeProps = {
   small: {

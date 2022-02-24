@@ -1,10 +1,11 @@
 enum ROUTE_PATHS {
+  ROOT = '/',
   LOGIN = '/login',
-  HOME = '/',
-  POST = 'posts/:postId',
-  EDIT_POST = 'editPost/:postId',
-  USERS = 'users',
-  USER = 'users/:userId',
+  HOME = '/home',
+  POST = '/posts/:postId',
+  EDIT_POST = '/editPost/:postId',
+  USERS = '/users',
+  USER = '/users/:userId',
 }
 
 export default ROUTE_PATHS;

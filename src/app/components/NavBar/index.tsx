@@ -1,8 +1,7 @@
 import styled from '@emotion/styled/macro';
-
-import { StyleConstants } from 'enums';
-import { PageWrapper } from 'app/components/styled';
 import { Logo, Nav } from 'app/components/NavBar/components';
+import { PageWrapper } from 'app/components/styled';
+import { StyleConstants } from 'enums';
 
 const Wrapper = styled.header`
   box-shadow: 0 1px 0 0 ${(p) => p.theme.borderLight};

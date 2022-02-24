@@ -1,31 +1,63 @@
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles, useTheme } from '@emotion/react/macro';
-import { useFormContext } from 'react-hook-form';
-import { HiEye, HiEyeOff } from 'react-icons/hi';
-import { useState, SyntheticEvent, ReactElement } from 'react';
-
-import type { IInputProps } from 'interfaces';
+import styled from '@emotion/styled/macro';
 import {
-  Label,
-  Input,
-  HelperText,
   ErrorMessage,
+  HelperText,
+  Input,
+  Label,
 } from 'app/components/Form/components';
+import {
+  baseInputStyle,
+  errorInputStyle,
+  inputWrapperStyle,
+  readOnlyInputStyle,
+} from 'app/components/Form/styled/FormInput.styled';
+import { ReactElement, SyntheticEvent, useState } from 'react';
+import { Path, useFormContext } from 'react-hook-form';
+import { HiEye, HiEyeOff } from 'react-icons/hi';
 
-const FormPasswordInput = ({
+const ShowOrHidePassword = styled.button`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  margin-right: 0.75rem;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  background-color: transparent;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+type Props<TFormValues> = {
+  id: Path<TFormValues>;
+  label: string;
+  placeholder?: string;
+  readOnly?: boolean;
+  helperText?: string;
+  validation?: object;
+};
+
+const FormPasswordInput = <TFormValues extends Record<string, unknown>>({
   id,
   label,
   validation,
   placeholder = '',
   helperText = '',
-  type = 'text',
   readOnly = false,
   ...rest
-}: IInputProps) => {
+}: Props<TFormValues>) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
+
   const theme = useTheme();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -39,31 +71,11 @@ const FormPasswordInput = ({
 
   let inputStyle: SerializedStyles;
   if (readOnly) {
-    inputStyle = css`
-      cursor: not-allowed;
-
-      &:focus {
-        border-color: ${theme.palette.grey[300]};
-      }
-    `;
+    inputStyle = readOnlyInputStyle(theme);
   } else if (errors[id]) {
-    inputStyle = css`
-      border-color: ${theme.palette.error.main};
-
-      &:focus {
-        border-color: ${theme.palette.error.main};
-        box-shadow: '0px 5px 10px ${theme.palette.error.main}';
-      }
-    `;
+    inputStyle = errorInputStyle(theme);
   } else {
-    inputStyle = css`
-      border-color: ${theme.palette.grey[300]};
-
-      &:focus {
-        border-color: ${theme.palette.primary.main};
-        box-shadow: '0px 5px 10px ${theme.palette.primary.main}';
-      }
-    `;
+    inputStyle = baseInputStyle(theme);
   }
 
   let buttonChild: ReactElement;
@@ -83,18 +95,13 @@ const FormPasswordInput = ({
   }
 
   return (
-    <>
+    <div>
       <Label htmlFor={id}>{label}</Label>
-      <div
-        css={css`
-          position: relative;
-          margin-top: 0.25rem;
-        `}
-      >
+      <div css={inputWrapperStyle}>
         <Input
           {...register(id, validation)}
           {...rest}
-          type={type}
+          type={showPassword ? 'text' : 'password'}
           name={id}
           id={id}
           readOnly={readOnly}
@@ -102,28 +109,9 @@ const FormPasswordInput = ({
           aria-describedby={id}
           css={inputStyle}
         />
-        <button
-          type='button'
-          onClick={handleToggle}
-          css={css`
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            margin-right: 0.75rem;
-            border-radius: 0.5rem;
-            padding: 0.25rem;
-
-            &:focus {
-              outline: none;
-              box-shadow: 0px 5px 10px ${theme.palette.primary.main};
-            }
-          `}
-        >
+        <ShowOrHidePassword type='button' onClick={handleToggle}>
           {buttonChild}
-        </button>
+        </ShowOrHidePassword>
       </div>
       <div
         css={css`
@@ -133,7 +121,7 @@ const FormPasswordInput = ({
         {helperText !== '' && <HelperText>{helperText}</HelperText>}
         {errors[id] && <ErrorMessage>{errors[id].message}</ErrorMessage>}
       </div>
-    </>
+    </div>
   );
 };
 

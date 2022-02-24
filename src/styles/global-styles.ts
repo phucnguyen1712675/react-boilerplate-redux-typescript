@@ -1,7 +1,8 @@
 import { css } from '@emotion/react/macro';
 import { StyleConstants } from 'enums';
+import { Theme } from 'types';
 
-const globalStyles = css`
+const globalStyles = (theme: Theme) => css`
   html,
   body {
     height: 100%;
@@ -11,7 +12,7 @@ const globalStyles = css`
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     padding-top: ${StyleConstants.NAV_BAR_HEIGHT};
-    background-color: #fff;
+    background-color: ${theme.background};
   }
   body.fontLoaded {
     font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;

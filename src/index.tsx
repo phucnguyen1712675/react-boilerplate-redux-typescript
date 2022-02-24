@@ -1,16 +1,15 @@
+import { ThemeProvider } from '@emotion/react/macro';
+import App from 'app';
+import FontFaceObserver from 'fontfaceobserver';
+import 'index.css';
 import { StrictMode } from 'react';
 import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import FontFaceObserver from 'fontfaceobserver';
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider, Global } from '@emotion/react';
-
-import 'index.css';
-import App from 'app';
-import store from 'store';
+import { Provider } from 'react-redux';
 import * as serviceWorker from 'serviceWorker';
-import { theme, globalStyles } from 'styles';
-import { fetchUsers } from 'store/usersSlice';
+import store from 'store';
+import { fetchUsers } from 'store/slices/usersSlice';
+import { theme } from 'styles';
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
@@ -30,7 +29,6 @@ render(
     <Provider store={store}>
       <HelmetProvider>
         <ThemeProvider theme={theme}>
-          <Global styles={globalStyles} />
           <App />
         </ThemeProvider>
       </HelmetProvider>

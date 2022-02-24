@@ -2,9 +2,9 @@
  * Asynchronously loads the component for LoginPage
  */
 
-import { lazyLoad } from 'utils/loadable';
 import { LoadingIndicator } from 'app/components';
 import { LoadingWrapper } from 'app/components/styled';
+import { lazyLoad } from 'utils';
 
 const LoginPage = lazyLoad(
   () => import('app/pages'),

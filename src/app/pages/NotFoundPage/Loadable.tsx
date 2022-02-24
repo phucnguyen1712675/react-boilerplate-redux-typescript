@@ -2,8 +2,8 @@
  * Asynchronously loads the component for NotFoundPage
  */
 
-import { lazyLoad } from 'utils/loadable';
 import { LoadingIndicator } from 'app/components';
+import { lazyLoad } from 'utils';
 
 const NotFoundPage = lazyLoad(
   () => import('app/pages'),

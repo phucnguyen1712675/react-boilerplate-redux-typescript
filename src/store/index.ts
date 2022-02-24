@@ -1,14 +1,36 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from '@reduxjs/toolkit';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from 'store/rootSaga';
+import { authReducer, postsReducer, usersReducer } from 'store/slices';
+import { fetchUsersSucceeded } from 'store/slices/usersSlice';
+import { history } from 'utils';
 
-import usersReducer from 'store/usersSlice';
-import postsReducer from 'store/postsSlice';
+const rootReducer = combineReducers({
+  router: connectRouter(history),
+  auth: authReducer,
+  users: usersReducer,
+  posts: postsReducer,
+});
+
+const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer: {
-    users: usersReducer,
-    posts: postsReducer,
-  },
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [fetchUsersSucceeded.type],
+      },
+    }).concat(sagaMiddleware, routerMiddleware(history)),
 });
+
+sagaMiddleware.run(rootSaga);
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

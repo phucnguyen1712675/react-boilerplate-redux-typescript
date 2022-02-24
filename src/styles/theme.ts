@@ -1,4 +1,4 @@
-import { spacing } from 'utils/units';
+import { spacing } from 'utils';
 
 const white = '#fff';
 const black = '#111';

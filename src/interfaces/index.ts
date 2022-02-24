@@ -1,1 +1,1 @@
-export type { default as IInputProps } from 'interfaces/IInputProps';
+export type { default as IRequestInfo } from 'interfaces/IRequestInfo';

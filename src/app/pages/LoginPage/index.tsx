@@ -1,8 +1,6 @@
-import { Helmet } from 'react-helmet-async';
-
-// import { NavBar } from 'app/components';
 import { PageWrapper, Title } from 'app/components/styled';
 import { LoginForm } from 'app/pages/LoginPage/components';
+import { Helmet } from 'react-helmet-async';
 
 const LoginPage = () => {
   return (
