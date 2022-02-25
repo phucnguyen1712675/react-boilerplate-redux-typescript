@@ -30,7 +30,7 @@ const LoginForm = () => {
         <Button
           type='submit'
           css={css`
-            align-self: start;
+            align-self: flex-start;
             margin-top: 0.5rem;
           `}
         >

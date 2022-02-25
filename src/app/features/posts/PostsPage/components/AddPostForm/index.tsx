@@ -88,7 +88,7 @@ const AddPostForm = () => {
             color='primary'
             type='submit'
             css={css`
-              align-self: start;
+              align-self: flex-start;
               margin-top: 0.5rem;
             `}
             disabled={!canSave}
