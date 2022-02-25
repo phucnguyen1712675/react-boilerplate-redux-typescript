@@ -4,12 +4,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { EntityId } from '@reduxjs/toolkit';
 import { FormGroup, FormInput, FormTextArea } from 'app/components/Form';
 import { Button, Title } from 'app/components/styled';
+import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
-import { editPost, selectPostById } from 'store/slices/postsSlice';
-import { showSuccessSwal } from 'utils/swal';
+import {
+  editPost,
+  selectPostById,
+  selectPostsError,
+  selectPostsStatus,
+} from 'store/slices/postsSlice';
+import { showErrorSwal, showSuccessSwal } from 'utils/swal';
 import {
   EditPostPayload,
   editPostSchema,
@@ -26,6 +32,8 @@ const EditPostForm = () => {
   const post = useAppSelector((state) =>
     selectPostById(state, postId as EntityId)
   );
+  const postsStatus = useAppSelector(selectPostsStatus);
+  const postsError = useAppSelector(selectPostsError);
   const methods = useForm<EditPostPayload>({
     resolver: yupResolver(editPostSchema),
     defaultValues: {
@@ -46,17 +54,21 @@ const EditPostForm = () => {
 
   const onSubmit = async (data: EditPostPayload) => {
     dispatch(editPost({ ...data, id: +postId }));
-    await showSuccessSwal({
-      title: 'Edited!',
-      text: 'Post edited successfully',
-    });
-    history.push(`/posts/${postId}`, {
-      state: {
-        from: {
-          pathname: `/editPost/${postId}`,
+    if (postsStatus === RequestStatus.SUCCEEDED) {
+      await showSuccessSwal({
+        title: 'Edited!',
+        text: 'Post edited successfully',
+      });
+      history.push(`/posts/${postId}`, {
+        state: {
+          from: {
+            pathname: `/editPost/${postId}`,
+          },
         },
-      },
-    });
+      });
+    } else if (postsStatus === RequestStatus.FAILED) {
+      showErrorSwal(postsError || 'Something went wrong');
+    }
   };
 
   return (
