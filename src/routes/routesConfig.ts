@@ -32,6 +32,7 @@ const routes: Route[] = [
     path: ROUTE_PATHS.USERS,
     component: UsersList,
     isPrivate: true,
+    exact: true,
   },
   {
     path: ROUTE_PATHS.USER,
