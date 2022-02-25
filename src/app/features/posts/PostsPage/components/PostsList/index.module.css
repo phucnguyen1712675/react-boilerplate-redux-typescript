@@ -1,0 +1,43 @@
+.paginationBtns {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  justify-content: start;
+}
+
+.paginationBtns a {
+  display: block;
+  padding: 10px;
+  margin: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #2b2eff;
+  color: #2b2eff;
+  cursor: pointer;
+}
+
+.paginationBtns :not(.paginationDisabled) a {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.paginationBtns :not(.paginationDisabled) a:hover {
+  color: #fff;
+  background-color: #2b2eff;
+}
+
+.paginationBtns a:hover {
+  color: white;
+  background-color: #2b2eff;
+}
+
+.paginationActive a {
+  color: white;
+  background-color: #2b2eff;
+}
+
+.paginationDisabled a {
+  color: #fff;
+  background-color: grey;
+  border-color: grey;
+}

@@ -1,5 +1,5 @@
-import LoginPage from 'app/pages/LoginPage/Loadable';
-import NotFoundPage from 'app/pages/NotFoundPage/Loadable';
+import LoginPage from 'app/features/auth/LoginPage/Loadable';
+import NotFoundPage from 'app/features/auth/NotFoundPage/Loadable';
 import { Route, Switch } from 'react-router-dom';
 import { PublicRoute, ROUTE_PATHS } from 'routes';
 

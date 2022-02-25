@@ -1,8 +1,8 @@
-import EditPostForm from 'app/pages/HomePage/features/posts/EditPostForm/Loadable';
-import PostsPage from 'app/pages/HomePage/features/posts/PostsPage/Loadable';
-import SinglePostPage from 'app/pages/HomePage/features/posts/SinglePostPage/Loadable';
-import UserPage from 'app/pages/HomePage/features/users/UserPage/Loadable';
-import UsersList from 'app/pages/HomePage/features/users/UsersList/Loadable';
+import EditPostForm from 'app/features/posts/EditPostForm/Loadable';
+import PostsPage from 'app/features/posts/PostsPage/Loadable';
+import SinglePostPage from 'app/features/posts/SinglePostPage/Loadable';
+import UserPage from 'app/features/users/UserPage/Loadable';
+import UsersList from 'app/features/users/UsersList/Loadable';
 import { ROUTE_PATHS } from 'routes';
 
 interface Route {

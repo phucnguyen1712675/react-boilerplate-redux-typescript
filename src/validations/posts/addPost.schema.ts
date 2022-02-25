@@ -1,13 +1,13 @@
 import * as yup from 'yup';
 
 import {
-  IEditPostFormValues,
+  EditPostPayload,
   editPostSchema,
 } from 'validations/posts/editPost.schema';
 
-export interface IAddPostFormValues extends IEditPostFormValues {
+export type AddPostPayload = EditPostPayload & {
   userId: number | string;
-}
+};
 
 export const addPostSchema = editPostSchema.shape({
   userId: yup

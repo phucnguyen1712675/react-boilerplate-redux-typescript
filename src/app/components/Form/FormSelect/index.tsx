@@ -4,30 +4,32 @@ import {
   ErrorIconWrapper,
   ErrorMessage,
   HelperText,
-  Input,
+  Select,
   Label,
 } from 'app/components/Form/components';
 import { wrapperStyle } from 'app/components/Form/styled';
 import { useFormControlsStyle } from 'hooks';
+import { Children, cloneElement, isValidElement, ReactNode } from 'react';
 import { Path, useFormContext } from 'react-hook-form';
 
 type Props<TFormValues> = {
   id: Path<TFormValues>;
   label: string;
-  type?: string;
-  placeholder?: string;
-  readOnly?: boolean;
+  children: ReactNode;
   helperText?: string;
+  placeholder?: string;
   validation?: object;
+  readOnly?: boolean;
+  defaultValue?: string;
 };
 
-const FormInput = <TFormValues extends Record<string, unknown>>({
-  id,
+const FormSelect = <TFormValues extends Record<string, unknown>>({
   label,
+  id,
   validation,
-  placeholder = '',
+  children,
   helperText = '',
-  type = 'text',
+  placeholder = '',
   readOnly = false,
   ...rest
 }: Props<TFormValues>) => {
@@ -36,27 +38,46 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
     formState: { errors },
   } = useFormContext();
 
-  const inputStyle = useFormControlsStyle({
+  const selectStyle = useFormControlsStyle({
     readOnly,
     error: errors[id],
   });
+
+  // Add disabled and selected attribute to option, will be used if readonly
+  const readOnlyChildren = Children.map<ReactNode, ReactNode>(
+    children,
+    (child) => {
+      if (isValidElement(child)) {
+        return cloneElement(child, {
+          disabled: child.props.value !== rest?.defaultValue,
+          selected: child.props.value === rest?.defaultValue,
+        });
+      }
+      return child;
+    }
+  );
 
   return (
     <div>
       <Label htmlFor={id}>{label}</Label>
       <div css={wrapperStyle}>
-        <Input
+        <Select
           {...register(id, validation)}
+          // defaultValue to value blank, will get overriden by ...rest if needed
+          defaultValue=''
           {...rest}
-          type={type}
           name={id}
           id={id}
-          readOnly={readOnly}
-          placeholder={placeholder}
           aria-describedby={id}
-          css={inputStyle}
-        />
-
+          css={selectStyle}
+        >
+          {placeholder && (
+            <option value='' disabled hidden>
+              {placeholder}
+            </option>
+          )}
+          {readOnly ? readOnlyChildren : children}
+        </Select>
         {errors[id] && <ErrorIconWrapper />}
       </div>
       <div
@@ -71,4 +92,4 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
   );
 };
 
-export default FormInput;
+export default FormSelect;

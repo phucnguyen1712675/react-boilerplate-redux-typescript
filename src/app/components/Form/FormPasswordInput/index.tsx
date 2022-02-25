@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css, SerializedStyles, useTheme } from '@emotion/react/macro';
+import { css, useTheme } from '@emotion/react/macro';
 import styled from '@emotion/styled/macro';
 import {
   ErrorMessage,
@@ -7,15 +7,12 @@ import {
   Input,
   Label,
 } from 'app/components/Form/components';
-import {
-  baseInputStyle,
-  errorInputStyle,
-  inputWrapperStyle,
-  readOnlyInputStyle,
-} from 'app/components/Form/styled/FormInput.styled';
+import { wrapperStyle } from 'app/components/Form/styled';
+import { useFormControlsStyle } from 'hooks';
 import { ReactElement, SyntheticEvent, useState } from 'react';
 import { Path, useFormContext } from 'react-hook-form';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
+import { Theme } from 'types';
 
 const ShowOrHidePassword = styled.button`
   position: absolute;
@@ -32,6 +29,16 @@ const ShowOrHidePassword = styled.button`
 
   &:focus {
     outline: none;
+  }
+`;
+
+const iconStyle = (theme: Theme) => css`
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: ${theme.palette.grey[300]};
+
+  &:hover {
+    color: ${theme.palette.grey[400]};
   }
 `;
 
@@ -69,35 +76,23 @@ const FormPasswordInput = <TFormValues extends Record<string, unknown>>({
     togglePassword();
   };
 
-  let inputStyle: SerializedStyles;
-  if (readOnly) {
-    inputStyle = readOnlyInputStyle(theme);
-  } else if (errors[id]) {
-    inputStyle = errorInputStyle(theme);
-  } else {
-    inputStyle = baseInputStyle(theme);
-  }
+  const inputStyle = useFormControlsStyle({
+    readOnly,
+    error: errors[id],
+  });
 
-  let buttonChild: ReactElement;
-  const buttonStyle = css`
-    cursor: pointer;
-    font-size: 1.25rem;
-    color: ${theme.palette.grey[300]};
-
-    &:hover {
-      color: ${theme.palette.grey[400]};
-    }
-  `;
+  const passwordIconStyle = iconStyle(theme);
+  let icon: ReactElement;
   if (showPassword) {
-    buttonChild = <HiEyeOff css={buttonStyle} />;
+    icon = <HiEyeOff css={passwordIconStyle} />;
   } else {
-    buttonChild = <HiEye css={buttonStyle} />;
+    icon = <HiEye css={passwordIconStyle} />;
   }
 
   return (
     <div>
       <Label htmlFor={id}>{label}</Label>
-      <div css={inputWrapperStyle}>
+      <div css={wrapperStyle}>
         <Input
           {...register(id, validation)}
           {...rest}
@@ -110,7 +105,7 @@ const FormPasswordInput = <TFormValues extends Record<string, unknown>>({
           css={inputStyle}
         />
         <ShowOrHidePassword type='button' onClick={handleToggle}>
-          {buttonChild}
+          {icon}
         </ShowOrHidePassword>
       </div>
       <div

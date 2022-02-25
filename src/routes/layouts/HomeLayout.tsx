@@ -23,9 +23,13 @@ const HomeLayout = () => {
   return (
     <Layout>
       <Switch>
-        {/*  eslint-disable-next-line @typescript-eslint/no-unused-vars */}
-        {routes.map(({ isPrivate: _, path, ...rest }) => (
-          <PrivateRoute key={path} path={path} {...rest} />
+        {routes.map((route) => (
+          <PrivateRoute
+            key={route.path}
+            path={route.path}
+            exact={route.exact}
+            component={route.component}
+          />
         ))}
         <Route
           path={pathname}

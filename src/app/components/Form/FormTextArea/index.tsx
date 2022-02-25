@@ -4,8 +4,8 @@ import {
   ErrorIconWrapper,
   ErrorMessage,
   HelperText,
-  Input,
   Label,
+  TextArea,
 } from 'app/components/Form/components';
 import { wrapperStyle } from 'app/components/Form/styled';
 import { useFormControlsStyle } from 'hooks';
@@ -14,20 +14,18 @@ import { Path, useFormContext } from 'react-hook-form';
 type Props<TFormValues> = {
   id: Path<TFormValues>;
   label: string;
-  type?: string;
   placeholder?: string;
   readOnly?: boolean;
   helperText?: string;
   validation?: object;
 };
 
-const FormInput = <TFormValues extends Record<string, unknown>>({
+const FormTextArea = <TFormValues extends Record<string, unknown>>({
   id,
   label,
   validation,
   placeholder = '',
   helperText = '',
-  type = 'text',
   readOnly = false,
   ...rest
 }: Props<TFormValues>) => {
@@ -36,7 +34,7 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
     formState: { errors },
   } = useFormContext();
 
-  const inputStyle = useFormControlsStyle({
+  const textAreaStyle = useFormControlsStyle({
     readOnly,
     error: errors[id],
   });
@@ -45,16 +43,16 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
     <div>
       <Label htmlFor={id}>{label}</Label>
       <div css={wrapperStyle}>
-        <Input
+        <TextArea
           {...register(id, validation)}
+          rows={3}
           {...rest}
-          type={type}
           name={id}
           id={id}
           readOnly={readOnly}
           placeholder={placeholder}
           aria-describedby={id}
-          css={inputStyle}
+          css={textAreaStyle}
         />
 
         {errors[id] && <ErrorIconWrapper />}
@@ -71,4 +69,4 @@ const FormInput = <TFormValues extends Record<string, unknown>>({
   );
 };
 
-export default FormInput;
+export default FormTextArea;
