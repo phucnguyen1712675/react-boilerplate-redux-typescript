@@ -2,10 +2,9 @@ import { EntityId } from '@reduxjs/toolkit';
 import { Link, Title } from 'app/components/styled';
 import { useAppSelector } from 'hooks';
 import { Helmet } from 'react-helmet-async';
-import { Redirect, Route, useLocation, useParams } from 'react-router-dom';
+import { Redirect, Route, useParams } from 'react-router-dom';
 import { selectPostsByUser } from 'store/slices/postsSlice';
 import { selectUserById } from 'store/slices/usersSlice';
-import type { LocationState } from 'types';
 
 type RouteParam = {
   userId: string;
@@ -19,14 +18,9 @@ const UserPage = () => {
   const postsForUser = useAppSelector((state) =>
     selectPostsByUser(state, userId as EntityId)
   );
-  const location = useLocation();
-  const locationState = location.state as LocationState | undefined;
-  const pathname = locationState?.from?.pathname;
 
   if (!user) {
-    return (
-      <Route path={pathname} render={() => <Redirect to='/notFoundPage' />} />
-    );
+    return <Route render={() => <Redirect to='/notFoundPage' />} />;
   }
 
   const postTitles = postsForUser.map((post) => (

@@ -10,7 +10,7 @@ import {
 import { Button, Title } from 'app/components/styled';
 import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector, useFormWithSchema } from 'hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import {
   addNewPost,
@@ -27,7 +27,7 @@ import {
 const DEFAULT_VALUE_USER_ID = 'DEFAULT_VALUE_USER_ID';
 
 const AddPostForm = () => {
-  const [addRequestStatus, setAddRequestStatus] = useState(RequestStatus.IDLE);
+  const [loading, setLoading] = useState(false);
   const methods = useFormWithSchema(addPostSchema);
   const { handleSubmit, reset } = methods;
   const dispatch = useAppDispatch();
@@ -35,24 +35,28 @@ const AddPostForm = () => {
   const postsStatus = useAppSelector(selectPostsStatus);
   const postsError = useAppSelector(selectPostsError);
 
+  useEffect(() => {
+    if (loading && postsStatus === RequestStatus.SUCCEEDED) {
+      reset();
+      showSuccessSwal({
+        title: 'Added!',
+        text: 'Post added successfully',
+      });
+      setLoading(false);
+    } else if (loading && postsStatus === RequestStatus.FAILED) {
+      showErrorSwal(postsError || 'Something went wrong');
+      setLoading(false);
+    }
+  }, [loading, postsError, postsStatus, reset]);
+
   const onSubmit = (data: AddPostPayload) => {
-    setAddRequestStatus(RequestStatus.LOADING);
     dispatch(
       addNewPost({
         ...data,
         userId: data.userId as EntityId,
       })
     );
-    if (postsStatus === RequestStatus.SUCCEEDED) {
-      reset();
-      showSuccessSwal({
-        title: 'Added!',
-        text: 'Post added successfully',
-      });
-    } else if (postsStatus === RequestStatus.FAILED) {
-      showErrorSwal(postsError || 'Something went wrong');
-    }
-    setAddRequestStatus(RequestStatus.IDLE);
+    setLoading(true);
   };
 
   const usersOptions = users.map((user) => (
@@ -61,7 +65,7 @@ const AddPostForm = () => {
     </option>
   ));
 
-  const canSave = addRequestStatus === RequestStatus.IDLE;
+  const canSave = !loading;
 
   return (
     <section>

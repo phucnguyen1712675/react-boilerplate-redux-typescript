@@ -6,7 +6,7 @@ import { Button, Title } from 'app/components/styled';
 import { PostAuthor } from 'app/features/posts/components';
 import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { ReactElement } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   Redirect,
@@ -49,6 +49,22 @@ const SinglePostPage = () => {
     from = ROUTE_PATHS.HOME;
   }
 
+  useEffect(() => {
+    const handleDeletePostSucceeded = async () => {
+      await showSuccessSwal({
+        title: 'Deleted!',
+        text: 'Post edited successfully',
+      });
+      history.push(from);
+    };
+
+    if (postsStatus === RequestStatus.SUCCEEDED) {
+      handleDeletePostSucceeded();
+    } else if (postsStatus === RequestStatus.FAILED) {
+      showErrorSwal(postsError || 'Something went wrong');
+    }
+  }, [from, history, postsError, postsStatus]);
+
   let content: ReactElement | null;
 
   if (postsStatus === RequestStatus.LOADING) {
@@ -67,15 +83,6 @@ const SinglePostPage = () => {
         const { isConfirmed } = await showConfirmSwal();
         if (isConfirmed) {
           dispatch(removePost(post.id));
-          if (postsStatus === RequestStatus.SUCCEEDED) {
-            await showSuccessSwal({
-              title: 'Deleted!',
-              text: 'Post edited successfully',
-            });
-            history.push(from);
-          } else if (postsStatus === RequestStatus.FAILED) {
-            showErrorSwal(postsError || 'Something went wrong');
-          }
         }
       };
 

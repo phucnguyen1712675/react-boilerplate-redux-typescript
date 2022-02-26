@@ -6,11 +6,11 @@ import { selectAllUsers } from 'store/slices/usersSlice';
 
 const UsersList = () => {
   const users = useAppSelector(selectAllUsers);
-  const match = useRouteMatch();
+  const { url } = useRouteMatch();
 
   const renderedUsers = users.map((user) => (
     <li key={user.id}>
-      <Link to={`${match.url}/${user.id}`}>{user.name}</Link>
+      <Link to={`${url}/${user.id}`}>{user.name}</Link>
     </li>
   ));
 

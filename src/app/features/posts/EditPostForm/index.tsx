@@ -45,7 +45,12 @@ const EditPostForm = () => {
   const { handleSubmit, reset, getValues } = methods;
 
   useEffect(() => {
-    if (Object.values(getValues).every((value) => value === '') && post) {
+    const formValues = getValues();
+    const isEmptyForm = Object.values(formValues).every(
+      (value) => value === ''
+    );
+
+    if (isEmptyForm && post) {
       reset({
         title: post.title,
         body: post.body,
@@ -53,9 +58,8 @@ const EditPostForm = () => {
     }
   }, [getValues, post, reset]);
 
-  const onSubmit = async (data: EditPostPayload) => {
-    dispatch(editPost({ ...data, id: +postId }));
-    if (postsStatus === RequestStatus.SUCCEEDED) {
+  useEffect(() => {
+    const handleEditPostSucceeded = async () => {
       await showSuccessSwal({
         title: 'Edited!',
         text: 'Post edited successfully',
@@ -67,9 +71,17 @@ const EditPostForm = () => {
           },
         },
       });
+    };
+
+    if (postsStatus === RequestStatus.SUCCEEDED) {
+      handleEditPostSucceeded();
     } else if (postsStatus === RequestStatus.FAILED) {
       showErrorSwal(postsError || 'Something went wrong');
     }
+  }, [history, postId, postsError, postsStatus]);
+
+  const onSubmit = (data: EditPostPayload) => {
+    dispatch(editPost({ ...data, id: +postId }));
   };
 
   return (
