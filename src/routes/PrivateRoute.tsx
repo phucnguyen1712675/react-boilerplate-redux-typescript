@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN_KEY } from 'app_constants';
-import { useLocation, Redirect, Route, RouteProps } from 'react-router-dom';
+import { Redirect, Route, RouteProps, useLocation } from 'react-router-dom';
 import { ROUTE_PATHS } from 'routes';
 import type { LocationState } from 'types';
 

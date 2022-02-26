@@ -7,6 +7,7 @@ import { Button, Title } from 'app/components/styled';
 import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useHistory, useParams } from 'react-router-dom';
 import {
@@ -72,29 +73,35 @@ const EditPostForm = () => {
   };
 
   return (
-    <section>
-      <Title>Edit Post</Title>
-      <FormProvider {...methods}>
-        <FormGroup onSubmit={handleSubmit(onSubmit)}>
-          <FormInput<EditPostPayload>
-            id='title'
-            label='Post Title'
-            placeholder='Title'
-          />
-          <FormTextArea<EditPostPayload> id='body' label='Body' />
-          <Button
-            color='primary'
-            type='submit'
-            css={css`
-              margin-top: 0.5rem;
-              align-self: flex-start;
-            `}
-          >
-            Save Post
-          </Button>
-        </FormGroup>
-      </FormProvider>
-    </section>
+    <>
+      <Helmet>
+        <title>Edit Post Form Page</title>
+        <meta name='description' content='EditPostFormPage' />
+      </Helmet>
+      <section>
+        <Title>Edit Post</Title>
+        <FormProvider {...methods}>
+          <FormGroup onSubmit={handleSubmit(onSubmit)}>
+            <FormInput<EditPostPayload>
+              id='title'
+              label='Post Title'
+              placeholder='Title'
+            />
+            <FormTextArea<EditPostPayload> id='body' label='Body' />
+            <Button
+              color='primary'
+              type='submit'
+              css={css`
+                margin-top: 0.5rem;
+                align-self: flex-start;
+              `}
+            >
+              Save Post
+            </Button>
+          </FormGroup>
+        </FormProvider>
+      </section>
+    </>
   );
 };
 

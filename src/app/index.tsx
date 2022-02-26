@@ -1,10 +1,10 @@
-import { useTheme, Global } from '@emotion/react/macro';
+import { Global, useTheme } from '@emotion/react/macro';
 import { ConnectedRouter } from 'connected-react-router';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ROUTE_PATHS } from 'routes';
-import { history } from 'utils';
 import { AuthLayout, HomeLayout } from 'routes/layouts';
 import { globalStyles } from 'styles';
+import { history } from 'utils';
 
 const App = () => {
   const theme = useTheme();

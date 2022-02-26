@@ -7,6 +7,7 @@ import { PostAuthor } from 'app/features/posts/components';
 import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { ReactElement } from 'react';
+import { Helmet } from 'react-helmet-async';
 import {
   Redirect,
   Route,
@@ -127,7 +128,15 @@ const SinglePostPage = () => {
     content = null;
   }
 
-  return content;
+  return (
+    <>
+      <Helmet>
+        <title>Single Post Page</title>
+        <meta name='description' content='SinglePostPage' />
+      </Helmet>
+      {content}
+    </>
+  );
 };
 
 export default SinglePostPage;

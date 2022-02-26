@@ -4,8 +4,8 @@ import {
   ErrorIconWrapper,
   ErrorMessage,
   HelperText,
-  Select,
   Label,
+  Select,
 } from 'app/components/Form/components';
 import { wrapperStyle } from 'app/components/Form/styled';
 import { useFormControlsStyle } from 'hooks';

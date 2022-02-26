@@ -10,6 +10,7 @@ import {
 import { Button, Title } from 'app/components/styled';
 import { RequestStatus } from 'enums';
 import { useAppDispatch, useAppSelector, useFormWithSchema } from 'hooks';
+import { useState } from 'react';
 import { FormProvider } from 'react-hook-form';
 import {
   addNewPost,
@@ -22,7 +23,6 @@ import {
   AddPostPayload,
   addPostSchema,
 } from 'validations/posts/addPost.schema';
-import { useState } from 'react';
 
 const DEFAULT_VALUE_USER_ID = 'DEFAULT_VALUE_USER_ID';
 

@@ -1,7 +1,8 @@
 import { Link, Title } from 'app/components/styled';
 import { useAppSelector } from 'hooks';
-import { selectAllUsers } from 'store/slices/usersSlice';
+import { Helmet } from 'react-helmet-async';
 import { useRouteMatch } from 'react-router-dom';
+import { selectAllUsers } from 'store/slices/usersSlice';
 
 const UsersList = () => {
   const users = useAppSelector(selectAllUsers);
@@ -14,10 +15,16 @@ const UsersList = () => {
   ));
 
   return (
-    <section>
-      <Title>Users</Title>
-      <ul>{renderedUsers}</ul>
-    </section>
+    <>
+      <Helmet>
+        <title>Users List Page</title>
+        <meta name='description' content='UserListsPage' />
+      </Helmet>
+      <section>
+        <Title>Users</Title>
+        <ul>{renderedUsers}</ul>
+      </section>
+    </>
   );
 };
 

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled/macro';
-import { Link, Button } from 'app/components/styled';
-import { ROUTE_PATHS } from 'routes';
+import { Button, Link } from 'app/components/styled';
 import { useAppDispatch } from 'hooks';
+import { ROUTE_PATHS } from 'routes';
 import { logout } from 'store/slices/authSlice';
 
 const Wrapper = styled.nav`
