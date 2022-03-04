@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@emotion/react/macro';
 import App from 'app';
+import { AppGlobalStyles } from 'app/components';
 import FontFaceObserver from 'fontfaceobserver';
 import 'index.css';
 import { StrictMode } from 'react';
@@ -8,7 +9,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 import * as serviceWorker from 'serviceWorker';
 import store from 'store';
-import { fetchUsers } from 'store/slices/usersSlice';
 import { theme } from 'styles';
 
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
@@ -22,13 +22,12 @@ openSansObserver.load().then(() => {
 
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
-store.dispatch(fetchUsers());
-
 render(
   <StrictMode>
     <Provider store={store}>
       <HelmetProvider>
         <ThemeProvider theme={theme}>
+          <AppGlobalStyles />
           <App />
         </ThemeProvider>
       </HelmetProvider>

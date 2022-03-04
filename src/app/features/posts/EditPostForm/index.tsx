@@ -1,24 +1,30 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react/macro';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { EntityId } from '@reduxjs/toolkit';
-import { FormGroup, FormInput, FormTextArea } from 'app/components/Form';
-import { Button, Title } from 'app/components/styled';
+import {
+  Form,
+  FormInput,
+  FormSubmitButton,
+  FormTextArea,
+} from 'app/components/Form';
+import { Title } from 'app/components/styled';
 import { RequestStatus } from 'enums';
-import { useAppDispatch, useAppSelector } from 'hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useFormWithSchema,
+  useRequestInfoWithErrorSwal,
+} from 'hooks';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { FormProvider, useForm } from 'react-hook-form';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import {
   editPost,
   selectPostById,
-  selectPostsError,
-  selectPostsStatus,
+  selectEditPostInfo,
 } from 'store/slices/postsSlice';
-import { showErrorSwal, showSuccessSwal } from 'utils/swal';
+import { showSuccessSwal } from 'utils/swal';
 import {
   EditPostPayload,
+  EditPostSchema,
   editPostSchema,
 } from 'validations/posts/editPost.schema';
 
@@ -28,21 +34,20 @@ type RouteParam = {
 
 const EditPostForm = () => {
   const { postId } = useParams<RouteParam>();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const dispatch = useAppDispatch();
   const post = useAppSelector((state) =>
     selectPostById(state, postId as EntityId)
   );
-  const postsStatus = useAppSelector(selectPostsStatus);
-  const postsError = useAppSelector(selectPostsError);
-  const methods = useForm<EditPostPayload>({
-    resolver: yupResolver(editPostSchema),
+  const { status, loading } = useRequestInfoWithErrorSwal(selectEditPostInfo);
+  const methods = useFormWithSchema(editPostSchema, {
     defaultValues: {
       title: post?.title ?? '',
       body: post?.body ?? '',
     },
   });
-  const { handleSubmit, reset, getValues } = methods;
+  const { reset, getValues } = methods;
 
   useEffect(() => {
     const formValues = getValues();
@@ -51,10 +56,11 @@ const EditPostForm = () => {
     );
 
     if (isEmptyForm && post) {
-      reset({
+      const resetValues = {
         title: post.title,
         body: post.body,
-      });
+      };
+      reset(resetValues);
     }
   }, [getValues, post, reset]);
 
@@ -64,24 +70,23 @@ const EditPostForm = () => {
         title: 'Edited!',
         text: 'Post edited successfully',
       });
-      history.push(`/posts/${postId}`, {
-        state: {
-          from: {
-            pathname: `/editPost/${postId}`,
-          },
+
+      const state = {
+        from: {
+          pathname: url,
         },
-      });
+      };
+      history.push(`/posts/${postId}`, state);
     };
 
-    if (postsStatus === RequestStatus.SUCCEEDED) {
+    if (status === RequestStatus.SUCCEEDED) {
       handleEditPostSucceeded();
-    } else if (postsStatus === RequestStatus.FAILED) {
-      showErrorSwal(postsError || 'Something went wrong');
     }
-  }, [history, postId, postsError, postsStatus]);
+  }, [history, postId, status, url]);
 
   const onSubmit = (data: EditPostPayload) => {
-    dispatch(editPost({ ...data, id: +postId }));
+    const editedValues = { ...data, id: +postId };
+    dispatch(editPost(editedValues));
   };
 
   return (
@@ -92,26 +97,17 @@ const EditPostForm = () => {
       </Helmet>
       <section>
         <Title>Edit Post</Title>
-        <FormProvider {...methods}>
-          <FormGroup onSubmit={handleSubmit(onSubmit)}>
-            <FormInput<EditPostPayload>
-              id='title'
-              label='Post Title'
-              placeholder='Title'
-            />
-            <FormTextArea<EditPostPayload> id='body' label='Body' />
-            <Button
-              color='primary'
-              type='submit'
-              css={css`
-                margin-top: 0.5rem;
-                align-self: flex-start;
-              `}
-            >
-              Save Post
-            </Button>
-          </FormGroup>
-        </FormProvider>
+        <Form<EditPostSchema> methods={methods} onSubmit={onSubmit}>
+          <FormInput<EditPostPayload>
+            id='title'
+            label='Post Title'
+            placeholder='Title'
+          />
+          <FormTextArea<EditPostPayload> id='body' label='Body' />
+          <FormSubmitButton color='primary'>
+            {loading ? 'Saving Post' : 'Save Post'}
+          </FormSubmitButton>
+        </Form>
       </section>
     </>
   );

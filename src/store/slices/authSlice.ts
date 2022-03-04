@@ -1,18 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RequestStatus } from 'enums';
+import { IRequestInfo } from 'interfaces';
 import type { RootState } from 'store';
 import { LoginPayload, User } from 'types';
 
 export interface IAuthState {
   isLoggedIn: boolean;
-  logging?: boolean;
   currentUser?: User;
-  error?: string;
+  authInfo: IRequestInfo;
 }
 
 const initialState: IAuthState = {
   isLoggedIn: false,
-  logging: false,
+  authInfo: {
+    status: RequestStatus.IDLE,
+  },
 };
 
 const authSlice = createSlice({
@@ -20,28 +23,44 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, _: PayloadAction<LoginPayload>) {
-      state.logging = true;
+      state.authInfo.status = RequestStatus.LOADING;
     },
     loginSuccess(state, action: PayloadAction<User>) {
       state.isLoggedIn = true;
-      state.logging = false;
+      state.authInfo.status = RequestStatus.SUCCEEDED;
       state.currentUser = action.payload;
+      state.authInfo.error = undefined;
     },
     loginFailed(state, action: PayloadAction<string>) {
-      state.logging = false;
-      state.error = action.payload;
+      state.authInfo.status = RequestStatus.FAILED;
+      state.authInfo.error = action.payload;
     },
-
     logout(state) {
+      state.authInfo.status = RequestStatus.LOADING;
+    },
+    logoutSuccess(state) {
+      state.authInfo.status = RequestStatus.SUCCEEDED;
       state.isLoggedIn = false;
       state.currentUser = undefined;
+      state.authInfo.error = undefined;
+    },
+    logoutFailed(state, action: PayloadAction<string>) {
+      state.authInfo.status = RequestStatus.FAILED;
+      state.authInfo.error = action.payload;
     },
   },
 });
 
-export const { login, loginSuccess, loginFailed, logout } = authSlice.actions;
+export const {
+  login,
+  loginSuccess,
+  loginFailed,
+  logout,
+  logoutSuccess,
+  logoutFailed,
+} = authSlice.actions;
 
-export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
-export const selectIsLogging = (state: RootState) => state.auth.logging;
+export const selectAuthIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
+export const selectAuthInfo = (state: RootState) => state.auth.authInfo;
 
 export default authSlice.reducer;

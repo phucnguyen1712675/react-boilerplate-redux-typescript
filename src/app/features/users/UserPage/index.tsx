@@ -2,7 +2,7 @@ import { EntityId } from '@reduxjs/toolkit';
 import { Link, Title } from 'app/components/styled';
 import { useAppSelector } from 'hooks';
 import { Helmet } from 'react-helmet-async';
-import { Redirect, Route, useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import { selectPostsByUser } from 'store/slices/postsSlice';
 import { selectUserById } from 'store/slices/usersSlice';
 
@@ -20,7 +20,7 @@ const UserPage = () => {
   );
 
   if (!user) {
-    return <Route render={() => <Redirect to='/notFoundPage' />} />;
+    return <Redirect to='/notfoundpage' />;
   }
 
   const postTitles = postsForUser.map((post) => (

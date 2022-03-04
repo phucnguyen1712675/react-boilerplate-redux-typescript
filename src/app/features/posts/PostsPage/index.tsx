@@ -11,8 +11,10 @@ const PostsPage = () => {
         <title>Posts Page</title>
         <meta name='description' content='PostsPage' />
       </Helmet>
-      <AddPostForm />
-      <PostsList />
+      <>
+        <AddPostForm />
+        <PostsList />
+      </>
     </>
   );
 };

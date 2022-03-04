@@ -12,10 +12,17 @@ const usersAdapter = createEntityAdapter<User>({
   sortComparer: (a, b) => Number(a.id) - Number(b.id),
 });
 
-const initialRequestInfo: IRequestInfo = {
-  status: RequestStatus.IDLE,
+type UserOperationInfo = {
+  fetchUsersInfo: IRequestInfo;
 };
-const initialState = usersAdapter.getInitialState(initialRequestInfo);
+
+const initialRequestStatus: UserOperationInfo = {
+  fetchUsersInfo: {
+    status: RequestStatus.IDLE,
+  },
+};
+
+const initialState = usersAdapter.getInitialState(initialRequestStatus);
 
 const usersSlice = createSlice({
   name: 'users',
@@ -23,15 +30,16 @@ const usersSlice = createSlice({
   reducers: {
     // =====================Fetch users========================
     fetchUsers(state) {
-      state.status = RequestStatus.LOADING;
+      state.fetchUsersInfo.status = RequestStatus.LOADING;
     },
     fetchUsersSucceeded(state, action: PayloadAction<User[]>) {
-      state.status = RequestStatus.SUCCEEDED;
+      state.fetchUsersInfo.status = RequestStatus.SUCCEEDED;
+      state.fetchUsersInfo.error = undefined;
       usersAdapter.setAll(state, action.payload);
     },
     fetchUsersFailed(state, action: PayloadAction<string>) {
-      state.status = RequestStatus.FAILED;
-      state.error = action.payload;
+      state.fetchUsersInfo.status = RequestStatus.FAILED;
+      state.fetchUsersInfo.error = action.payload;
     },
   },
 });
@@ -41,5 +49,8 @@ export const { fetchUsers, fetchUsersSucceeded, fetchUsersFailed } =
 
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
   usersAdapter.getSelectors<RootState>(({ users }) => users);
+
+export const selectFetchUsersInfo = (state: RootState) =>
+  state.users.fetchUsersInfo;
 
 export default usersSlice.reducer;

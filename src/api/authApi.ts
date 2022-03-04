@@ -1,7 +1,6 @@
 import store from 'store';
 import { selectAllUsers } from 'store/slices/usersSlice';
-import type { User } from 'types';
-import { LoginPayload } from 'types';
+import { User, LoginPayload } from 'types';
 
 const authApi = {
   login(data: LoginPayload): Promise<User | undefined> {

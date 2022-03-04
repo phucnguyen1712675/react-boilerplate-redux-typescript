@@ -11,7 +11,7 @@ const globalStyles = (theme: Theme) => css`
   }
   body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    padding-top: ${StyleConstants.NAV_BAR_HEIGHT};
+    /* padding-top: ${StyleConstants.NAV_BAR_HEIGHT}; */
     background-color: ${theme.background};
   }
   body.fontLoaded {
@@ -45,6 +45,20 @@ const globalStyles = (theme: Theme) => css`
     list-style: none;
     padding: 0;
     margin: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
   }
 
   .icon {

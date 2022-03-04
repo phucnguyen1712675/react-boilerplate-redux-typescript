@@ -26,6 +26,11 @@ const Wrapper = styled.header`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    column-gap: 1rem;
+
+    @media (min-width: 640px) {
+      column-gap: 4rem;
+    }
   }
 `;
 

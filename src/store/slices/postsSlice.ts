@@ -15,11 +15,29 @@ const postsAdapter = createEntityAdapter<Post>({
   sortComparer: (a, b) => Number(a.id) - Number(b.id),
 });
 
-const initialRequestInfo: IRequestInfo = {
-  status: RequestStatus.IDLE,
+type PostOperationInfo = {
+  fetchPostsInfo: IRequestInfo;
+  addPostInfo: IRequestInfo;
+  editPostInfo: IRequestInfo;
+  removePostInfo: IRequestInfo;
 };
 
-const initialState = postsAdapter.getInitialState(initialRequestInfo);
+const initialRequestStatus: PostOperationInfo = {
+  fetchPostsInfo: {
+    status: RequestStatus.IDLE,
+  },
+  addPostInfo: {
+    status: RequestStatus.IDLE,
+  },
+  editPostInfo: {
+    status: RequestStatus.IDLE,
+  },
+  removePostInfo: {
+    status: RequestStatus.IDLE,
+  },
+};
+
+const initialState = postsAdapter.getInitialState(initialRequestStatus);
 
 const postsSlice = createSlice({
   name: 'posts',
@@ -27,34 +45,37 @@ const postsSlice = createSlice({
   reducers: {
     // =====================Fetch posts========================
     fetchPosts(state) {
-      state.status = RequestStatus.LOADING;
+      state.fetchPostsInfo.status = RequestStatus.LOADING;
     },
     fetchPostsSucceeded(state, action: PayloadAction<Post[]>) {
-      state.status = RequestStatus.SUCCEEDED;
+      state.fetchPostsInfo.status = RequestStatus.SUCCEEDED;
+      state.fetchPostsInfo.error = undefined;
       postsAdapter.upsertMany(state, action.payload);
     },
     fetchPostsFailed(state, action: PayloadAction<string>) {
-      state.status = RequestStatus.FAILED;
-      state.error = action.payload;
+      state.fetchPostsInfo.status = RequestStatus.FAILED;
+      state.fetchPostsInfo.error = action.payload;
     },
     // =====================Add new post========================
     addNewPost(state, _: PayloadAction<Omit<Post, 'id'>>) {
-      state.status = RequestStatus.LOADING;
+      state.addPostInfo.status = RequestStatus.LOADING;
     },
     addNewPostSucceeded(state, action: PayloadAction<Post>) {
-      state.status = RequestStatus.SUCCEEDED;
+      state.addPostInfo.status = RequestStatus.SUCCEEDED;
+      state.addPostInfo.error = undefined;
       postsAdapter.addOne(state, action.payload);
     },
     addNewPostFailed(state, action: PayloadAction<string>) {
-      state.status = RequestStatus.FAILED;
-      state.error = action.payload;
+      state.addPostInfo.status = RequestStatus.FAILED;
+      state.addPostInfo.error = action.payload;
     },
     // =====================Edit post========================
     editPost(state, _: PayloadAction<Omit<Post, 'userId'>>) {
-      state.status = RequestStatus.LOADING;
+      state.editPostInfo.status = RequestStatus.LOADING;
     },
     editPostSucceeded(state, action: PayloadAction<Omit<Post, 'userId'>>) {
-      state.status = RequestStatus.SUCCEEDED;
+      state.editPostInfo.status = RequestStatus.SUCCEEDED;
+      state.editPostInfo.error = undefined;
       const { id, ...changes } = action.payload;
       postsAdapter.updateOne(state, {
         id,
@@ -62,20 +83,21 @@ const postsSlice = createSlice({
       });
     },
     editPostFailed(state, action: PayloadAction<string>) {
-      state.status = RequestStatus.FAILED;
-      state.error = action.payload;
+      state.editPostInfo.status = RequestStatus.FAILED;
+      state.editPostInfo.error = action.payload;
     },
     // =====================Remove post========================
     removePost(state, _: PayloadAction<EntityId>) {
-      state.status = RequestStatus.LOADING;
+      state.removePostInfo.status = RequestStatus.LOADING;
     },
     removePostSucceeded(state, action: PayloadAction<EntityId>) {
-      state.status = RequestStatus.SUCCEEDED;
+      state.removePostInfo.status = RequestStatus.SUCCEEDED;
+      state.removePostInfo.error = undefined;
       postsAdapter.removeOne(state, action.payload);
     },
     removePostFailed(state, action: PayloadAction<string>) {
-      state.status = RequestStatus.FAILED;
-      state.error = action.payload;
+      state.removePostInfo.status = RequestStatus.FAILED;
+      state.removePostInfo.error = action.payload;
     },
   },
 });
@@ -101,13 +123,18 @@ export const {
   selectIds: selectPostIds,
 } = postsAdapter.getSelectors<RootState>(({ posts }) => posts);
 
+export const selectFetchPostsInfo = (state: RootState) =>
+  state.posts.fetchPostsInfo;
+export const selectAddPostInfo = (state: RootState) => state.posts.addPostInfo;
+export const selectEditPostInfo = (state: RootState) =>
+  state.posts.editPostInfo;
+export const selectRemovePostInfo = (state: RootState) =>
+  state.posts.removePostInfo;
+
 export const selectPostsByUser = createSelector(
   [selectAllPosts, (_: RootState, userId: EntityId) => userId],
   (posts, userId) =>
     posts.filter((post) => Number(post.userId) === Number(userId))
 );
-
-export const selectPostsStatus = (state: RootState) => state.posts.status;
-export const selectPostsError = (state: RootState) => state.posts.error;
 
 export default postsSlice.reducer;

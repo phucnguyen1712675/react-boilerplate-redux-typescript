@@ -1,17 +1,21 @@
-import * as yup from 'yup';
-
 import {
   EditPostPayload,
   editPostSchema,
 } from 'validations/posts/editPost.schema';
+import { InferType, number } from 'yup';
 
-export type AddPostPayload = EditPostPayload & {
-  userId: number | string;
-};
+export const addPostSchema = editPostSchema
+  .shape({
+    userId: number()
+      .typeError('Please select a user')
+      .required('Author is required'),
+  })
+  .required();
 
-export const addPostSchema = editPostSchema.shape({
-  userId: yup
-    .number()
-    .typeError('Please select a user')
-    .required('Author is required'),
-});
+export type AddPostSchema = typeof addPostSchema;
+
+export type AddPostPayload = EditPostPayload & InferType<typeof addPostSchema>;
+
+// export type AddPostPayload = EditPostPayload & {
+//   userId: number | string;
+// };

@@ -5,38 +5,38 @@ import UserPage from 'app/features/users/UserPage/Loadable';
 import UsersList from 'app/features/users/UsersList/Loadable';
 import { ROUTE_PATHS } from 'routes';
 
-interface Route {
+interface IRoute {
   path: string;
-  component: (props: unknown) => JSX.Element;
+  children: (props: unknown) => JSX.Element;
   isPrivate: boolean;
   exact?: boolean;
 }
-const routes: Route[] = [
+const routes: IRoute[] = [
   {
     path: ROUTE_PATHS.HOME,
-    component: PostsPage,
+    children: PostsPage,
     isPrivate: true,
     exact: true,
   },
   {
     path: ROUTE_PATHS.POST,
-    component: SinglePostPage,
+    children: SinglePostPage,
     isPrivate: true,
   },
   {
     path: ROUTE_PATHS.EDIT_POST,
-    component: EditPostForm,
+    children: EditPostForm,
     isPrivate: true,
   },
   {
     path: ROUTE_PATHS.USERS,
-    component: UsersList,
+    children: UsersList,
     isPrivate: true,
     exact: true,
   },
   {
     path: ROUTE_PATHS.USER,
-    component: UserPage,
+    children: UserPage,
     isPrivate: true,
   },
 ];

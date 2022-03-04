@@ -1,8 +1,8 @@
 import styled from '@emotion/styled/macro';
 import { Button, Link } from 'app/components/styled';
-import { useAppDispatch } from 'hooks';
+import { useAppDispatch, useRequestInfoWithErrorSwal } from 'hooks';
 import { ROUTE_PATHS } from 'routes';
-import { logout } from 'store/slices/authSlice';
+import { logout, selectAuthInfo } from 'store/slices/authSlice';
 
 const Wrapper = styled.nav`
   display: flex;
@@ -13,6 +13,7 @@ const Wrapper = styled.nav`
 
 const Nav = () => {
   const dispatch = useAppDispatch();
+  const { loading } = useRequestInfoWithErrorSwal(selectAuthInfo);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -23,7 +24,7 @@ const Nav = () => {
       <Link to={ROUTE_PATHS.HOME}>Posts</Link>
       <Link to={ROUTE_PATHS.USERS}>Users</Link>
       <Button variant='outline' size='small' onClick={handleLogout}>
-        Log Out
+        {loading ? 'Signing Out' : 'Sign Out'}
       </Button>{' '}
     </Wrapper>
   );
