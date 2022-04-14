@@ -8,10 +8,12 @@ import {
 } from '@reduxjs/toolkit';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import createSagaMiddleware from 'redux-saga';
+import { authReducer } from 'store/auth';
+import { logoutSuccess } from 'store/auth/authSlice';
+import { postsReducer } from 'store/posts';
 import rootSaga from 'store/rootSaga';
-import { authReducer, postsReducer, usersReducer } from 'store/slices';
-import { fetchUsersSucceeded } from 'store/slices/usersSlice';
-import { logoutSuccess } from 'store/slices/authSlice';
+import { usersReducer } from 'store/users';
+import { fetchUsersSucceeded } from 'store/users/usersSlice';
 import { history } from 'utils';
 
 const combinedReducer = combineReducers({

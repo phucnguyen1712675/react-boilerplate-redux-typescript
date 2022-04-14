@@ -9,7 +9,7 @@ import {
   useFormWithSchema,
   useRequestInfoWithErrorSwal,
 } from 'hooks';
-import { login, selectAuthInfo } from 'store/slices/authSlice';
+import { login, selectAuthInfo } from 'store/auth/authSlice';
 import type { LoginPayload } from 'types';
 import { loginSchema } from 'validations/users/login.schema';
 

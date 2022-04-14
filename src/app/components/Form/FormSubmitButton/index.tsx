@@ -1,10 +1,10 @@
 import styled from '@emotion/styled/macro';
-import { Button } from 'app/components/styled';
+import { Button } from 'app/components';
 import { ComponentProps } from 'react';
 
 const FormButton = styled(Button)`
   align-self: flex-start;
-  margin-top: 0.5rem;
+  /* margin-top: 0.5rem; */
 `;
 
 type Props = ComponentProps<typeof FormButton>;

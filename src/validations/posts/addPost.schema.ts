@@ -1,5 +1,5 @@
 import {
-  EditPostPayload,
+  EditPostValues,
   editPostSchema,
 } from 'validations/posts/editPost.schema';
 import { InferType, number } from 'yup';
@@ -14,7 +14,7 @@ export const addPostSchema = editPostSchema
 
 export type AddPostSchema = typeof addPostSchema;
 
-export type AddPostPayload = EditPostPayload & InferType<typeof addPostSchema>;
+export type AddPostValues = EditPostValues & InferType<typeof addPostSchema>;
 
 // export type AddPostPayload = EditPostPayload & {
 //   userId: number | string;

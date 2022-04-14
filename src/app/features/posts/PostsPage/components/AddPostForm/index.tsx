@@ -15,11 +15,11 @@ import {
   useRequestInfoWithErrorSwal,
 } from 'hooks';
 import { useEffect } from 'react';
-import { addNewPost, selectAddPostInfo } from 'store/slices/postsSlice';
-import { selectAllUsers } from 'store/slices/usersSlice';
+import { addNewPost, selectAddPostInfo } from 'store/posts/postsSlice';
+import { selectAllUsers } from 'store/users/usersSlice';
 import { showSuccessSwal } from 'utils/swal';
 import {
-  AddPostPayload,
+  AddPostValues,
   AddPostSchema,
   addPostSchema,
 } from 'validations/posts/addPost.schema';
@@ -43,7 +43,7 @@ const AddPostForm = () => {
     }
   }, [status, reset]);
 
-  const onSubmit = (data: AddPostPayload) => {
+  const onSubmit = (data: AddPostValues) => {
     const newPost = {
       ...data,
       userId: data.userId as EntityId,
@@ -63,12 +63,12 @@ const AddPostForm = () => {
     <section>
       <Title as='h2'>Add new post</Title>
       <Form<AddPostSchema> methods={methods} onSubmit={onSubmit}>
-        <FormInput<AddPostPayload>
+        <FormInput<AddPostValues>
           id='title'
           label='Title'
           placeholder='Title'
         />
-        <FormSelect<AddPostPayload>
+        <FormSelect<AddPostValues>
           id='userId'
           label='Author'
           defaultValue={`${DEFAULT_VALUE_USER_ID}`}
@@ -78,7 +78,7 @@ const AddPostForm = () => {
           </option>
           {usersOptions}
         </FormSelect>
-        <FormTextArea<AddPostPayload> id='body' label='Body' />
+        <FormTextArea<AddPostValues> id='body' label='Body' />
         <FormSubmitButton color='primary' disabled={!canSave}>
           {loading ? 'Saving Post' : 'Save Post'}
         </FormSubmitButton>

@@ -1,11 +1,13 @@
-import { usersApi } from 'api';
+import { UsersApi } from 'api';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import {
   fetchUsers,
   fetchUsersFailed,
   fetchUsersSucceeded,
-} from 'store/slices/usersSlice';
+} from 'store/users/usersSlice';
 import { User } from 'types';
+
+const usersApi = UsersApi.getInstance();
 
 function* fetchUsersAction() {
   try {

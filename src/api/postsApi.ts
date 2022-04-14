@@ -1,30 +1,48 @@
 import { EntityId } from '@reduxjs/toolkit';
-import axiosClient from 'api';
+import ProtectedHttpClient from 'api/protected-http-client';
+import appConfig from 'config';
 import type { Post } from 'types';
 
-const postsApi = {
-  getAll(): Promise<Post[]> {
+class PostsApi extends ProtectedHttpClient {
+  private static classInstance?: PostsApi;
+
+  private constructor() {
+    super(`${appConfig.REACT_APP_BASE_URL}`);
+  }
+
+  public static getInstance() {
+    if (!this.classInstance) {
+      this.classInstance = new PostsApi();
+    }
+
+    return this.classInstance;
+  }
+
+  public getAll = () => {
     const url = '/posts';
-    return axiosClient.get(url);
-  },
-  getById(id: EntityId): Promise<Post> {
+    return this.instance.get<Post[]>(url);
+  };
+
+  public getById = (id: EntityId) => {
     const url = `/posts/${id}`;
-    return axiosClient.get(url);
-  },
-  add(data: Omit<Post, 'id'>): Promise<Post> {
+    return this.instance.get<Post>(url);
+  };
+
+  public add = (data: Omit<Post, 'id'>) => {
     const url = '/posts';
-    return axiosClient.post(url, data);
-  },
-  update(data: Omit<Post, 'userId'>): Promise<Post> {
+    return this.instance.post<Omit<Post, 'id'>, Post>(url, data);
+  };
+
+  public update = (data: Omit<Post, 'userId'>) => {
     const { id, ...rest } = data;
     const url = `/posts/${id}`;
-    return axiosClient.patch(url, rest);
-  },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  remove(id: EntityId): Promise<any> {
-    const url = `/posts/${id}`;
-    return axiosClient.delete(url);
-  },
-};
+    return this.instance.patch<Omit<Post, 'id' | 'userId'>, Post>(url, rest);
+  };
 
-export default postsApi;
+  public remove = (id: EntityId) => {
+    const url = `/posts/${id}`;
+    return this.instance.delete<void>(url);
+  };
+}
+
+export default PostsApi;

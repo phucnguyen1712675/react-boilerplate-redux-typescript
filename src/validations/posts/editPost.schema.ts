@@ -9,4 +9,4 @@ export const editPostSchema = object({
 
 export type EditPostSchema = typeof editPostSchema;
 
-export type EditPostPayload = InferType<typeof editPostSchema>;
+export type EditPostValues = InferType<typeof editPostSchema>;

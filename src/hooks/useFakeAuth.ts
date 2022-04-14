@@ -1,5 +1,5 @@
 import { useAppSelector } from 'hooks';
-import { selectAllUsers } from 'store/slices/usersSlice';
+import { selectAllUsers } from 'store/users/usersSlice';
 
 /**
  * Fake authentication hook

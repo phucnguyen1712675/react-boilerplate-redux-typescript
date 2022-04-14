@@ -1,6 +1,7 @@
 import { ThemeProvider } from '@emotion/react/macro';
 import App from 'app';
 import { AppGlobalStyles } from 'app/components';
+import { AppLoadingProvider } from 'contexts/AppLoading';
 import FontFaceObserver from 'fontfaceobserver';
 import 'index.css';
 import { StrictMode } from 'react';
@@ -28,7 +29,9 @@ render(
       <HelmetProvider>
         <ThemeProvider theme={theme}>
           <AppGlobalStyles />
-          <App />
+          <AppLoadingProvider>
+            <App />
+          </AppLoadingProvider>
         </ThemeProvider>
       </HelmetProvider>
     </Provider>

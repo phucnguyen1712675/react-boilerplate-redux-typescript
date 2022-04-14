@@ -1,6 +1,6 @@
 import { EntityId } from '@reduxjs/toolkit';
 import { useAppSelector } from 'hooks';
-import { selectUserById } from 'store/slices/usersSlice';
+import { selectUserById } from 'store/users/usersSlice';
 
 type Props = {
   userId: EntityId;

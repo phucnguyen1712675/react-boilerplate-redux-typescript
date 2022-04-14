@@ -3,8 +3,8 @@ import { Link, Title } from 'app/components/styled';
 import { useAppSelector } from 'hooks';
 import { Helmet } from 'react-helmet-async';
 import { Redirect, useParams } from 'react-router-dom';
-import { selectPostsByUser } from 'store/slices/postsSlice';
-import { selectUserById } from 'store/slices/usersSlice';
+import { selectPostsByUser } from 'store/posts/postsSlice';
+import { selectUserById } from 'store/users/usersSlice';
 
 type RouteParam = {
   userId: string;

@@ -1,4 +1,6 @@
+import styled from '@emotion/styled/macro';
 import { EntityId } from '@reduxjs/toolkit';
+import { Button } from 'app/components';
 import {
   Form,
   FormInput,
@@ -18,15 +20,21 @@ import { Helmet } from 'react-helmet-async';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import {
   editPost,
-  selectPostById,
   selectEditPostInfo,
-} from 'store/slices/postsSlice';
+  selectPostById,
+} from 'store/posts/postsSlice';
 import { showSuccessSwal } from 'utils/swal';
 import {
-  EditPostPayload,
   EditPostSchema,
   editPostSchema,
+  EditPostValues,
 } from 'validations/posts/editPost.schema';
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+`;
 
 type RouteParam = {
   postId: string;
@@ -47,15 +55,17 @@ const EditPostForm = () => {
       body: post?.body ?? '',
     },
   });
-  const { reset, getValues } = methods;
+  const {
+    reset,
+    getValues,
+    formState: { isDirty },
+  } = methods;
 
   useEffect(() => {
     const formValues = getValues();
-    const isEmptyForm = Object.values(formValues).every(
-      (value) => value === ''
-    );
+    const hasValues = Object.values(formValues).every(Boolean);
 
-    if (isEmptyForm && post) {
+    if (!hasValues && post) {
       const resetValues = {
         title: post.title,
         body: post.body,
@@ -65,29 +75,24 @@ const EditPostForm = () => {
   }, [getValues, post, reset]);
 
   useEffect(() => {
-    const handleEditPostSucceeded = async () => {
-      await showSuccessSwal({
+    if (status === RequestStatus.SUCCEEDED) {
+      showSuccessSwal({
         title: 'Edited!',
         text: 'Post edited successfully',
       });
-
-      const state = {
-        from: {
-          pathname: url,
-        },
-      };
-      history.push(`/posts/${postId}`, state);
-    };
-
-    if (status === RequestStatus.SUCCEEDED) {
-      handleEditPostSucceeded();
     }
   }, [history, postId, status, url]);
 
-  const onSubmit = (data: EditPostPayload) => {
-    const editedValues = { ...data, id: +postId };
-    dispatch(editPost(editedValues));
+  const onSubmit = (data: EditPostValues) => {
+    const editPostPayload = { ...data, id: postId as EntityId };
+    dispatch(editPost(editPostPayload));
   };
+
+  const handleGoBack = () => {
+    history.goBack();
+  };
+
+  const canSave = isDirty && !loading;
 
   return (
     <>
@@ -98,15 +103,20 @@ const EditPostForm = () => {
       <section>
         <Title>Edit Post</Title>
         <Form<EditPostSchema> methods={methods} onSubmit={onSubmit}>
-          <FormInput<EditPostPayload>
+          <FormInput<EditPostValues>
             id='title'
             label='Post Title'
             placeholder='Title'
           />
-          <FormTextArea<EditPostPayload> id='body' label='Body' />
-          <FormSubmitButton color='primary'>
-            {loading ? 'Saving Post' : 'Save Post'}
-          </FormSubmitButton>
+          <FormTextArea<EditPostValues> id='body' label='Body' />
+          <ButtonWrapper>
+            <FormSubmitButton color='primary' disabled={!canSave}>
+              {loading ? 'Saving Post' : 'Save Post'}
+            </FormSubmitButton>
+            <Button variant='outline' onClick={handleGoBack}>
+              Go Back
+            </Button>
+          </ButtonWrapper>
         </Form>
       </section>
     </>

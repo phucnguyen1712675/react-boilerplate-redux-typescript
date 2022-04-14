@@ -1,7 +1,18 @@
-/* eslint-disable no-console */
-import { EntityId, PayloadAction } from '@reduxjs/toolkit';
-import { postsApi } from 'api';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { PostsApi } from 'api';
+import { push } from 'connected-react-router';
+import {
+  call,
+  put,
+  putResolve,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects';
+import {
+  AddPostPayload,
+  EditPostPayload,
+  RemovePostPayload,
+} from 'store/posts';
 import {
   addNewPost,
   addNewPostFailed,
@@ -15,8 +26,13 @@ import {
   removePost,
   removePostFailed,
   removePostSucceeded,
-} from 'store/slices/postsSlice';
+  resetAddPostInfo,
+  resetEditPostInfo,
+  resetRemovePostInfo,
+} from 'store/posts/postsSlice';
 import { Post } from 'types';
+
+const postsApi = PostsApi.getInstance();
 
 function* fetchPostsAction() {
   try {
@@ -29,7 +45,7 @@ function* fetchPostsAction() {
   }
 }
 
-function* addNewPostAction(action: PayloadAction<Omit<Post, 'id'>>) {
+function* addNewPostAction(action: PayloadAction<AddPostPayload>) {
   try {
     const data: Post = yield call(postsApi.add, action.payload);
     yield put(addNewPostSucceeded(data));
@@ -37,28 +53,38 @@ function* addNewPostAction(action: PayloadAction<Omit<Post, 'id'>>) {
     if (error instanceof Error) {
       yield put(addNewPostFailed(error.message));
     }
+  } finally {
+    yield put(resetAddPostInfo());
   }
 }
 
-function* editPostAction(action: PayloadAction<Omit<Post, 'userId'>>) {
+function* editPostAction(action: PayloadAction<EditPostPayload>) {
+  const { payload } = action;
   try {
-    yield call(postsApi.update, action.payload);
-    yield put(editPostSucceeded(action.payload));
+    yield call(postsApi.update, payload);
+    yield put(editPostSucceeded(payload));
   } catch (error) {
     if (error instanceof Error) {
       yield put(editPostFailed(error.message));
     }
+  } finally {
+    yield put(resetEditPostInfo());
   }
 }
 
-function* removePostAction(action: PayloadAction<EntityId>) {
+function* removePostAction(action: PayloadAction<RemovePostPayload>) {
+  const { payload } = action;
+  const { postId, from } = payload;
   try {
-    yield call(postsApi.remove, action.payload);
-    yield put(removePostSucceeded(action.payload));
+    yield call(postsApi.remove, postId);
+    yield put(removePostSucceeded(payload));
   } catch (error) {
     if (error instanceof Error) {
       yield put(removePostFailed(error.message));
     }
+  } finally {
+    yield putResolve(resetRemovePostInfo());
+    yield put(push(from));
   }
 }
 

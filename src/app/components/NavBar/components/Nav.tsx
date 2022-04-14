@@ -1,8 +1,9 @@
 import styled from '@emotion/styled/macro';
-import { Button, Link } from 'app/components/styled';
+import { Button } from 'app/components';
+import { Link } from 'app/components/styled';
 import { useAppDispatch, useRequestInfoWithErrorSwal } from 'hooks';
 import { ROUTE_PATHS } from 'routes';
-import { logout, selectAuthInfo } from 'store/slices/authSlice';
+import { logout, selectAuthInfo } from 'store/auth/authSlice';
 
 const Wrapper = styled.nav`
   display: flex;

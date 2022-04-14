@@ -2,7 +2,7 @@ import { Link, Title } from 'app/components/styled';
 import { useAppSelector } from 'hooks';
 import { Helmet } from 'react-helmet-async';
 import { useRouteMatch } from 'react-router-dom';
-import { selectAllUsers } from 'store/slices/usersSlice';
+import { selectAllUsers } from 'store/users/usersSlice';
 
 const UsersList = () => {
   const users = useAppSelector(selectAllUsers);

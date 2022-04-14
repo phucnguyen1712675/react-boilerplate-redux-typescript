@@ -9,6 +9,11 @@ import {
 import { RequestStatus } from 'enums';
 import type { IRequestInfo } from 'interfaces';
 import type { RootState } from 'store';
+import {
+  AddPostPayload,
+  EditPostPayload,
+  RemovePostPayload,
+} from 'store/posts';
 import { Post } from 'types';
 
 const postsAdapter = createEntityAdapter<Post>({
@@ -22,19 +27,27 @@ type PostOperationInfo = {
   removePostInfo: IRequestInfo;
 };
 
+const initialFetchPostsInfo = {
+  status: RequestStatus.IDLE,
+};
+
+const initialAddPostInfo = {
+  status: RequestStatus.IDLE,
+};
+
+const initialEditPostInfo = {
+  status: RequestStatus.IDLE,
+};
+
+const initialRemovePostInfo = {
+  status: RequestStatus.IDLE,
+};
+
 const initialRequestStatus: PostOperationInfo = {
-  fetchPostsInfo: {
-    status: RequestStatus.IDLE,
-  },
-  addPostInfo: {
-    status: RequestStatus.IDLE,
-  },
-  editPostInfo: {
-    status: RequestStatus.IDLE,
-  },
-  removePostInfo: {
-    status: RequestStatus.IDLE,
-  },
+  fetchPostsInfo: initialFetchPostsInfo,
+  addPostInfo: initialAddPostInfo,
+  editPostInfo: initialEditPostInfo,
+  removePostInfo: initialRemovePostInfo,
 };
 
 const initialState = postsAdapter.getInitialState(initialRequestStatus);
@@ -57,7 +70,7 @@ const postsSlice = createSlice({
       state.fetchPostsInfo.error = action.payload;
     },
     // =====================Add new post========================
-    addNewPost(state, _: PayloadAction<Omit<Post, 'id'>>) {
+    addNewPost(state, _: PayloadAction<AddPostPayload>) {
       state.addPostInfo.status = RequestStatus.LOADING;
     },
     addNewPostSucceeded(state, action: PayloadAction<Post>) {
@@ -69,11 +82,15 @@ const postsSlice = createSlice({
       state.addPostInfo.status = RequestStatus.FAILED;
       state.addPostInfo.error = action.payload;
     },
+    // =====================Set add post status========================
+    resetAddPostInfo(state) {
+      state.addPostInfo = initialAddPostInfo;
+    },
     // =====================Edit post========================
-    editPost(state, _: PayloadAction<Omit<Post, 'userId'>>) {
+    editPost(state, _: PayloadAction<EditPostPayload>) {
       state.editPostInfo.status = RequestStatus.LOADING;
     },
-    editPostSucceeded(state, action: PayloadAction<Omit<Post, 'userId'>>) {
+    editPostSucceeded(state, action: PayloadAction<EditPostPayload>) {
       state.editPostInfo.status = RequestStatus.SUCCEEDED;
       state.editPostInfo.error = undefined;
       const { id, ...changes } = action.payload;
@@ -86,18 +103,26 @@ const postsSlice = createSlice({
       state.editPostInfo.status = RequestStatus.FAILED;
       state.editPostInfo.error = action.payload;
     },
+    // =====================Set edit post status========================
+    resetEditPostInfo(state) {
+      state.editPostInfo = initialEditPostInfo;
+    },
     // =====================Remove post========================
-    removePost(state, _: PayloadAction<EntityId>) {
+    removePost(state, _: PayloadAction<RemovePostPayload>) {
       state.removePostInfo.status = RequestStatus.LOADING;
     },
-    removePostSucceeded(state, action: PayloadAction<EntityId>) {
+    removePostSucceeded(state, action: PayloadAction<RemovePostPayload>) {
       state.removePostInfo.status = RequestStatus.SUCCEEDED;
       state.removePostInfo.error = undefined;
-      postsAdapter.removeOne(state, action.payload);
+      postsAdapter.removeOne(state, action.payload.postId);
     },
     removePostFailed(state, action: PayloadAction<string>) {
       state.removePostInfo.status = RequestStatus.FAILED;
       state.removePostInfo.error = action.payload;
+    },
+    // =====================Set remove post status========================
+    resetRemovePostInfo(state) {
+      state.removePostInfo = initialRemovePostInfo;
     },
   },
 });
@@ -109,12 +134,15 @@ export const {
   addNewPost,
   addNewPostSucceeded,
   addNewPostFailed,
+  resetAddPostInfo,
   editPost,
   editPostSucceeded,
   editPostFailed,
+  resetEditPostInfo,
   removePost,
   removePostSucceeded,
   removePostFailed,
+  resetRemovePostInfo,
 } = postsSlice.actions;
 
 export const {

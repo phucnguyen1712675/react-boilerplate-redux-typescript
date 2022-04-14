@@ -5,7 +5,7 @@ import styles from 'app/features/posts/PostsPage/components/PostsList/index.modu
 import { useAppSelector } from 'hooks';
 import { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import { selectPostIds } from 'store/slices/postsSlice';
+import { selectPostIds } from 'store/posts/postsSlice';
 
 const PostsWrapper = styled.div`
   display: flex;

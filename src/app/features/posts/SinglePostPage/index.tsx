@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react/macro';
 import { EntityId } from '@reduxjs/toolkit';
-import { Button, Title } from 'app/components/styled';
+import { Button } from 'app/components';
+import { Title } from 'app/components/styled';
 import { PostAuthor } from 'app/features/posts/components';
 import { RequestStatus } from 'enums';
 import {
@@ -18,7 +19,7 @@ import {
   removePost,
   selectPostById,
   selectRemovePostInfo,
-} from 'store/slices/postsSlice';
+} from 'store/posts/postsSlice';
 import { showConfirmSwal, showSuccessSwal } from 'utils/swal';
 
 type RouteParam = {
@@ -41,82 +42,13 @@ const SinglePostPage = () => {
   }
 
   useEffect(() => {
-    const handleDeletePostSucceeded = async () => {
-      await showSuccessSwal({
+    if (status === RequestStatus.SUCCEEDED) {
+      showSuccessSwal({
         title: 'Deleted!',
         text: 'Post edited successfully',
       });
-      history.push(from);
-    };
-
-    if (status === RequestStatus.SUCCEEDED) {
-      handleDeletePostSucceeded();
     }
   }, [from, history, status]);
-
-  // if (postsStatus === RequestStatus.LOADING) {
-  //   content = <LoadingIndicator small />;
-  // } else if (postsStatus === RequestStatus.SUCCEEDED) {
-  //   if (!post) {
-  //     content = <Redirect to='/notfoundpage' />;
-  //   } else {
-  //     const handleEditPost = () => {
-  //       history.push(`/editPost/${post.id}`);
-  //     };
-
-  //     const handleDeletePost = async () => {
-  //       const { isConfirmed } = await showConfirmSwal();
-  //       if (isConfirmed) {
-  //         dispatch(removePost(post.id));
-  //       }
-  //     };
-
-  //     content = (
-  //       <section>
-  //         <article
-  //           css={css`
-  //             display: flex;
-  //             flex-direction: column;
-  //             row-gap: 1.5rem;
-  //           `}
-  //         >
-  //           <div>
-  //             <Title
-  //               css={css`
-  //                 margin-bottom: 5px;
-  //                 line-height: 2.5rem;
-  //                 font-size: 2.5rem;
-  //               `}
-  //             >
-  //               {post.title}
-  //             </Title>
-  //             <PostAuthor userId={post.userId} />
-  //           </div>
-  //           <p>{post.body}</p>
-  //           <div
-  //             css={css`
-  //               display: flex;
-  //               column-gap: 1rem;
-  //             `}
-  //           >
-  //             <Button color='primary' onClick={handleEditPost}>
-  //               Edit Post
-  //             </Button>
-  //             <Button
-  //               color='error'
-  //               variant='outline'
-  //               onClick={handleDeletePost}
-  //             >
-  //               Delete Post
-  //             </Button>
-  //           </div>
-  //         </article>
-  //       </section>
-  //     );
-  //   }
-  // } else if (postsStatus === RequestStatus.FAILED) {
-  //   content = <div>{postsError}</div>;
-  // }
 
   if (!post) {
     return <Redirect to='/notfoundpage' />;
@@ -128,7 +60,11 @@ const SinglePostPage = () => {
   const handleDeletePost = async () => {
     const { isConfirmed } = await showConfirmSwal();
     if (isConfirmed) {
-      dispatch(removePost(post.id));
+      const removePostPayload = {
+        postId: post.id,
+        from,
+      };
+      dispatch(removePost(removePostPayload));
     }
   };
 

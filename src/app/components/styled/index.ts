@@ -1,5 +1,4 @@
 export { default as A } from 'app/components/styled/A';
-export { default as Button } from 'app/components/styled/Button';
 export { default as Link } from 'app/components/styled/Link';
 export { default as LoadingWrapper } from 'app/components/styled/LoadingWrapper';
 export { default as PageWrapper } from 'app/components/styled/PageWrapper';

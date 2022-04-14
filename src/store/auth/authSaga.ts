@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { authApi } from 'api';
+import { AuthApi } from 'api';
 import { ACCESS_TOKEN_KEY } from 'app_constants';
 import { push } from 'connected-react-router';
 import { call, fork, put, putResolve, take } from 'redux-saga/effects';
@@ -11,8 +11,10 @@ import {
   logout,
   logoutFailed,
   logoutSuccess,
-} from 'store/slices/authSlice';
+} from 'store/auth/authSlice';
 import { LoginPayload, User } from 'types';
+
+const authApi = AuthApi.getInstance();
 
 function* loginAction(payload: LoginPayload) {
   try {

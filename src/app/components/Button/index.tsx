@@ -1,6 +1,7 @@
 import isPropValid from '@emotion/is-prop-valid';
 import { CSSObject } from '@emotion/react/macro';
-import styled from '@emotion/styled/macro';
+import styled, { Interpolation } from '@emotion/styled/macro';
+import { MouseEventHandler, ReactNode } from 'react';
 import defaultTheme from 'styles/theme';
 import type { Theme } from 'types';
 import { fontSizes, spacing } from 'utils';
@@ -99,23 +100,23 @@ const getPropsByVariant = ({
   return variants[variant] || variants.solid;
 };
 
-type Props = {
+interface IStyledButtonAttrsProps {
   color?: Palette;
   variant?: Variant;
   size?: Size;
   theme?: Theme;
   enableElevation?: boolean;
   disabled?: boolean;
-};
+}
 
-const StyledButton = ({
+const StyledButtonAttrs = ({
   color,
   enableElevation = false,
   disabled = false,
   variant = 'solid',
   size = 'medium',
   theme = defaultTheme,
-}: Props): CSSObject => {
+}: IStyledButtonAttrsProps): CSSObject => {
   const fontSizeBySize = buttonSizeProps[size]?.fontSize;
   const paddingBySize = buttonSizeProps[size]?.padding;
 
@@ -123,7 +124,7 @@ const StyledButton = ({
 
   return {
     fontWeight: 500,
-    cursor: 'pointer',
+    cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.7 : undefined,
     transition: 'all 0.3s linear',
     padding: buttonSizeProps.medium.padding,
@@ -147,6 +148,20 @@ const buttonConfig = {
     isPropValid(prop) && !IGNORED_PROPS.includes(prop),
 };
 
-const Button = styled('button', buttonConfig)(StyledButton);
+const StyledButton = styled('button', buttonConfig)(StyledButtonAttrs);
 
+interface IButtonProps extends IStyledButtonAttrsProps {
+  children: ReactNode;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  type?: 'button' | 'submit' | 'reset';
+  css?: Interpolation<Theme>;
+}
+
+const Button = ({ children, type = 'button', ...rest }: IButtonProps) => {
+  return (
+    <StyledButton type={type} {...rest}>
+      {children}
+    </StyledButton>
+  );
+};
 export default Button;

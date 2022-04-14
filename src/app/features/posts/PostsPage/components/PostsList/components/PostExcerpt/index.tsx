@@ -2,11 +2,11 @@
 import { css } from '@emotion/react/macro';
 import styled from '@emotion/styled/macro';
 import { EntityId } from '@reduxjs/toolkit';
-import { Button } from 'app/components/styled';
+import { Button } from 'app/components';
 import { PostAuthor } from 'app/features/posts/components';
 import { useAppSelector } from 'hooks';
 import { useHistory } from 'react-router-dom';
-import { selectPostById } from 'store/slices/postsSlice';
+import { selectPostById } from 'store/posts/postsSlice';
 
 const StyledPostExcerpt = styled.article`
   border: 1px solid rgb(177, 174, 174);
